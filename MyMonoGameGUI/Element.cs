@@ -8,23 +8,20 @@ namespace MyMonoGame.GUI
     public class Element
     {
         protected Rectangle _pos;
-        public bool _isHover = false;
-        public bool _isFocus = false;
-        public bool isEnable = true;
-        public bool isRender = true;
+        internal bool _isHover = false;
+        internal bool _isFocus = false;
+        internal bool isEnable = true;
         public ElementLink parent;
 
-        public Element(bool enable = true, bool render = true, ElementLink parentLink = null) {
+        public Element(bool enable = true, ElementLink parentLink = null) {
             isEnable = enable;
-            isRender = render;
             parent = parentLink;
             _pos = Rectangle.Empty;
         }
 
-        public Element(Rectangle pos, bool enable = true, bool render = true, ElementLink parent = null)
+        public Element(Rectangle pos, bool enable = true, ElementLink parent = null)
         {
             isEnable = enable;
-            isRender = render;
             _pos = pos;
         }
 

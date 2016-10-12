@@ -12,7 +12,7 @@ namespace MyMonoGame.GUI
         public string output { get { return _value; } set { _value = value; _text = (_placeHolder != null && _value == null) ? _placeHolder : _value; OnTextChange(); } }
         protected event EventHandler _validate;
 
-        public TextField(Rectangle pos, string value, SpriteFont font, Colors colors, textAlign align = textAlign.centerCenter, string placeHolder = null, EventHandler validate = null, bool enable = true, bool render = true, ElementLink parentLink = null)
+        public TextField(Rectangle pos, string value, SpriteFont font, Colors colors, textAlign align = textAlign.centerCenter, string placeHolder = null, EventHandler validate = null, bool enable = true, ElementLink parentLink = null)
         {
             _value = value;
             _font = font;
@@ -22,12 +22,11 @@ namespace MyMonoGame.GUI
             _validate = validate;
             _text = (placeHolder != null && value == null) ? placeHolder : value;
             isEnable = enable;
-            isRender = render;
             parent = parentLink;
             OnTextChange();
         }
 
-        public TextField(Vector vector, string value, SpriteFont font, Colors colors, textAlign align = textAlign.bottomRight, string placeHolder = null, EventHandler validate = null, bool enable = true, bool render = true, ElementLink parentLink = null)
+        public TextField(Vector vector, string value, SpriteFont font, Colors colors, textAlign align = textAlign.bottomRight, string placeHolder = null, EventHandler validate = null, bool enable = true, ElementLink parentLink = null)
         {
             _pos = new Rectangle(vector.X, vector.Y, 0, 0);
             _value = value;
@@ -38,7 +37,6 @@ namespace MyMonoGame.GUI
             _validate = validate;
             _text = (placeHolder != null && value == null) ? placeHolder : value;
             isEnable = enable;
-            isRender = render;
             parent = parentLink;
             OnTextChange();
         }

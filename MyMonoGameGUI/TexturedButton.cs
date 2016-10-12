@@ -10,14 +10,13 @@ namespace MyMonoGame.GUI
         Button button;
         private int _unFocusTime;
 
-        public TexturedButton(Rectangle pos, Texture2D sprite, Colors colors, EventHandler click = null, bool enable = true, bool render = true, ElementLink parentLink = null)
+        public TexturedButton(Rectangle pos, Texture2D sprite, Colors colors, EventHandler click = null, bool enable = true, ElementLink parentLink = null)
         {
             _pos = pos;
             _sprite = sprite;
             _colors = colors;
             button = new Button(pos, click);
             isEnable = enable;
-            isRender = render;
             parent = parentLink;
         }
 

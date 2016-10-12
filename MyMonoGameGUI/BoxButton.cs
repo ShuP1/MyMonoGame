@@ -12,14 +12,13 @@ namespace MyMonoGame.GUI
 
         public BoxButton() { }
 
-        public BoxButton(Rectangle pos, boxSprites backSprites, Colors colors, EventHandler click = null, bool enable = true, bool render = true, ElementLink parentLink = null)
+        public BoxButton(Rectangle pos, boxSprites backSprites, Colors colors, EventHandler click = null, bool enable = true, ElementLink parentLink = null)
         {
             _pos = pos;
             _backSprites = backSprites;
             _colors = colors;
             _button = new Button(pos, click);
             isEnable = enable;
-            isRender = render;
             parent = parentLink;
         }
 

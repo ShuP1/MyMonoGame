@@ -49,10 +49,10 @@ namespace MyMonoGame.GUI
             foreach (Element element in elements.Values.ToArray())
             {
                 bool isEnable = element.isEnable;
-                Element parent = GetParent(element);
-                while (parent != null && isEnable)
+                if (isEnable)
                 {
-                    isEnable = parent.isEnable;
+                    ElementLink parent = element.parent;
+                    if (parent != null) { isEnable = GetElement(parent).isEnable; }
                 }
 
                 if (isEnable) {
@@ -74,6 +74,19 @@ namespace MyMonoGame.GUI
             return link;
         }
 
+        public void SetEnable(ElementLink link, bool enable)
+        {
+            if (elements.ContainsKey(link))
+            {
+                elements[link].isEnable = enable;
+            }
+            else
+            {
+                Console.WriteLine("SetEnable Null");
+                throw new NullReferenceException();
+            }
+        }
+
         public Element GetElement(ElementLink link)
         {
             if (elements.ContainsKey(link))
@@ -82,20 +95,8 @@ namespace MyMonoGame.GUI
             }
             else
             {
+                Console.WriteLine("GetElement Null");
                 throw new NullReferenceException();
-            }
-        }
-
-
-        public Element GetParent(Element element)
-        {
-            try
-            {
-                return GetElement(element.parent);
-            }
-            catch (Exception e)
-            {
-                return null;
             }
         }
 
@@ -103,14 +104,14 @@ namespace MyMonoGame.GUI
         {
             foreach (Element element in elements.Values.ToArray())
             {
-                bool isRender = element.isRender;
-                Element parent = GetParent(element);
-                while (parent != null && isRender)
+                bool isEnable = element.isEnable;
+                if (isEnable)
                 {
-                    isRender = parent.isRender;
+                    ElementLink parent = element.parent;
+                    if (parent != null) { isEnable = GetElement(parent).isEnable; }
                 }
 
-                if (isRender)
+                if (isEnable)
                 {
                     element.Draw(spriteBatch);
                 }

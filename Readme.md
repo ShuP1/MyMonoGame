@@ -11,7 +11,7 @@ MyMonogame is a simple gui library from [Monogame](https://github.com/MonoGame/M
 
 1. Download last version
 
-2. Copy Game1.cs
+2. Copy Exemple/Game1.cs
 
 3. Let's Go
 

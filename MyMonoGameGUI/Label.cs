@@ -14,7 +14,7 @@ namespace MyMonoGame.GUI
 
         public Label() { }
 
-        public Label(Rectangle pos, string text, SpriteFont font, Colors colors, textAlign align = textAlign.centerCenter, bool enable = true, bool render = true, ElementLink parentLink = null)
+        public Label(Rectangle pos, string text, SpriteFont font, Colors colors, textAlign align = textAlign.centerCenter, bool enable = true, ElementLink parentLink = null)
         {
             _pos = pos;
             _text = text;
@@ -22,12 +22,11 @@ namespace MyMonoGame.GUI
             _colors = colors;
             _align = align;
             isEnable = enable;
-            isRender = render;
             parent = parentLink;
             OnTextChange();
         }
 
-        public Label(Vector vector, string text, SpriteFont font, Colors colors, textAlign align = textAlign.bottomRight, bool enable = true, bool render = true, ElementLink parentLink = null)
+        public Label(Vector vector, string text, SpriteFont font, Colors colors, textAlign align = textAlign.bottomRight, bool enable = true, ElementLink parentLink = null)
         {
             _pos = new Rectangle(vector.X, vector.Y, 0, 0);
             _text = text;
@@ -35,7 +34,6 @@ namespace MyMonoGame.GUI
             _colors = colors;
             _align = align;
             isEnable = enable;
-            isRender = render;
             parent = parentLink;
             OnTextChange();
         }

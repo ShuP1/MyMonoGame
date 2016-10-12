@@ -10,7 +10,7 @@ namespace MyMonoGame.GUI
         protected Button _button;
         private int _unFocusTime;
 
-        public BoxLabelButton(Rectangle pos, boxSprites backSprites, Colors colors, string text, SpriteFont font, Colors textColors, Label.textAlign align = Label.textAlign.centerCenter, EventHandler click = null, bool enable = true, bool render = true, ElementLink parentLink = null)
+        public BoxLabelButton(Rectangle pos, boxSprites backSprites, Colors colors, string text, SpriteFont font, Colors textColors, Label.textAlign align = Label.textAlign.centerCenter, EventHandler click = null, bool enable = true, ElementLink parentLink = null)
         {
             _pos = pos;
             _backSprites = backSprites;
@@ -18,7 +18,6 @@ namespace MyMonoGame.GUI
             _button = new Button(pos, click);
             _label = new Label(pos, text, font, textColors, align);
             isEnable = enable;
-            isRender = render;
             parent = parentLink;
         }
 

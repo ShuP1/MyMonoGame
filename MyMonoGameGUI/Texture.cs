@@ -10,13 +10,12 @@ namespace MyMonoGame.GUI
 
         public Texture() { }
 
-        public Texture(Rectangle pos, Texture2D sprite, Colors colors, bool enable = true, bool render = true, ElementLink parentLink = null)
+        public Texture(Rectangle pos, Texture2D sprite, Colors colors, bool enable = true, ElementLink parentLink = null)
         {
             _pos = pos;
             _sprite = sprite;
             _colors = colors;
             isEnable = enable;
-            isRender = render;
             parent = parentLink;
         }
 

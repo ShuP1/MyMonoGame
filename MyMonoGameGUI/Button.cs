@@ -11,12 +11,11 @@ namespace MyMonoGame.GUI
 
         public Button() { }
 
-        public Button(Rectangle pos, EventHandler click = null, bool enable = true, bool render = true, ElementLink parentLink = null)
+        public Button(Rectangle pos, EventHandler click = null, bool enable = true, ElementLink parentLink = null)
         {
             _pos = pos;
             _click = click;
             isEnable = enable;
-            isRender = render;
             parent = parentLink;
         }
 
