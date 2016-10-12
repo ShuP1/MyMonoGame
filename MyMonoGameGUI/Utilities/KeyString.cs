@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MyMonoGame
+namespace MyMonoGame.Utilities
 {
     public static class KeyString
     {

@@ -1,4 +1,4 @@
-﻿namespace MyMonoGame.GUI
+﻿namespace MyMonoGame.Utilities
 {
     public struct Mouse
     {

@@ -22,7 +22,7 @@ namespace MyMonoGame.GUI
             parent = parentLink;
         }
 
-        public override void Update(int x, int y, Mouse mouse, Keys key, bool isMaj, EventArgs e)
+        public override void Update(int x, int y, Utilities.Mouse mouse, Keys key, bool isMaj, EventArgs e)
         {
             base.Update(x, y, mouse, key, isMaj, e);
             _button.Update(x, y, mouse, key, isMaj, e);

@@ -20,7 +20,7 @@ namespace MyMonoGame.GUI
 
         public void Initialise()
         {
-            KeyString.InitializeKeyString();
+            Utilities.KeyString.InitializeKeyString();
         }
 
         public void Update()
@@ -29,7 +29,7 @@ namespace MyMonoGame.GUI
             newState = Microsoft.Xna.Framework.Input.Mouse.GetState();
             mouseX = newState.X;
             mouseY = newState.Y;
-            Mouse nowState;
+            Utilities.Mouse nowState;
             nowState.leftPress = (oldState.LeftButton == ButtonState.Released && newState.LeftButton == ButtonState.Pressed);
             nowState.leftRelease = (oldState.LeftButton == ButtonState.Pressed && newState.LeftButton == ButtonState.Released);
             nowState.rightPress = (oldState.LeftButton == ButtonState.Released && newState.LeftButton == ButtonState.Pressed);
@@ -52,7 +52,7 @@ namespace MyMonoGame.GUI
                 if (isEnable)
                 {
                     ElementLink parent = element.parent;
-                    if (parent != null) { isEnable = GetElement(parent).isEnable; }
+                    if (parent != null) { isEnable = Get(parent).isEnable; }
                 }
 
                 if (isEnable) {
@@ -66,12 +66,24 @@ namespace MyMonoGame.GUI
             elements.Clear();
         }
 
-        public ElementLink AddElement(Element element)
+        public ElementLink Add(Element element)
         {
             ElementLink link = new ElementLink(index);
             index++;
             elements.Add(link, element);
             return link;
+        }
+
+        public void Remove(ElementLink link)
+        {
+            if (elements.ContainsKey(link))
+            {
+                elements.Remove(link);
+            }
+            else
+            {
+                throw new NullReferenceException();
+            }
         }
 
         public void SetEnable(ElementLink link, bool enable)
@@ -87,7 +99,7 @@ namespace MyMonoGame.GUI
             }
         }
 
-        public Element GetElement(ElementLink link)
+        public Element Get(ElementLink link)
         {
             if (elements.ContainsKey(link))
             {
@@ -108,7 +120,7 @@ namespace MyMonoGame.GUI
                 if (isEnable)
                 {
                     ElementLink parent = element.parent;
-                    if (parent != null) { isEnable = GetElement(parent).isEnable; }
+                    if (parent != null) { isEnable = Get(parent).isEnable; }
                 }
 
                 if (isEnable)

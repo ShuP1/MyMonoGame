@@ -1,6 +1,6 @@
 # Galactic Colors Control
 
-MyMonogame is a simple gui library from [Monogame](https://github.com/MonoGame/MonoGame) create from [GGC](https://github.com/sheychen290/Galactic_Colors_Control)
+MyMonogame is a simple gui library from [Monogame](https://github.com/MonoGame/MonoGame) create from [GCC](https://github.com/sheychen290/Galactic_Colors_Control)
 
 ### Prerequisities
 

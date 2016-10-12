@@ -37,22 +37,22 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Box.cs" />
-    <Compile Include="BoxButton.cs" />
-    <Compile Include="BoxLabel.cs" />
-    <Compile Include="BoxLabelButton.cs" />
-    <Compile Include="boxSprites.cs" />
-    <Compile Include="Button.cs" />
+    <Compile Include="GUI\Box.cs" />
+    <Compile Include="GUI\BoxButton.cs" />
+    <Compile Include="GUI\BoxLabel.cs" />
+    <Compile Include="GUI\BoxLabelButton.cs" />
+    <Compile Include="GUI\boxSprites.cs" />
+    <Compile Include="GUI\Button.cs" />
     <Compile Include="Colors.cs" />
-    <Compile Include="Element.cs" />
-    <Compile Include="ElementLink.cs" />
-    <Compile Include="KeyString.cs" />
-    <Compile Include="Label.cs" />
-    <Compile Include="Manager.cs" />
-    <Compile Include="Mouse.cs" />
-    <Compile Include="TextField.cs" />
-    <Compile Include="Texture.cs" />
-    <Compile Include="TexturedButton.cs" />
+    <Compile Include="GUI\Element.cs" />
+    <Compile Include="GUI\ElementLink.cs" />
+    <Compile Include="Utilities\KeyString.cs" />
+    <Compile Include="GUI\Label.cs" />
+    <Compile Include="GUI\Manager.cs" />
+    <Compile Include="Utilities\Mouse.cs" />
+    <Compile Include="GUI\TextField.cs" />
+    <Compile Include="GUI\Texture.cs" />
+    <Compile Include="GUI\TexturedButton.cs" />
     <Compile Include="Vector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

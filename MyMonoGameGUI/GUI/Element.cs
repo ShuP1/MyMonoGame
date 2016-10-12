@@ -35,7 +35,7 @@ namespace MyMonoGame.GUI
 
         }
 
-        public virtual void Update(int x, int y, Mouse mouse, Keys key, bool isMaj, EventArgs e)
+        public virtual void Update(int x, int y, Utilities.Mouse mouse, Keys key, bool isMaj, EventArgs e)
         {
             if (mouse.leftPress)
             {

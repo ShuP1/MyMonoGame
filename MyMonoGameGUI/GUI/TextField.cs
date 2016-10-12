@@ -41,7 +41,7 @@ namespace MyMonoGame.GUI
             OnTextChange();
         }
 
-        public override void Update(int x, int y, Mouse mouse, Keys key, bool isMaj, EventArgs e)
+        public override void Update(int x, int y, Utilities.Mouse mouse, Keys key, bool isMaj, EventArgs e)
         {
             base.Update(x, y, mouse, key, isMaj, e);
 
@@ -60,7 +60,7 @@ namespace MyMonoGame.GUI
 
                     default:
                         char ch;
-                        if (KeyString.KeyToString(key, isMaj, out ch)) { _value += ch; _text = (_placeHolder != null && _value == null) ? _placeHolder : _value; OnTextChange(); }
+                        if (Utilities.KeyString.KeyToString(key, isMaj, out ch)) { _value += ch; _text = (_placeHolder != null && _value == null) ? _placeHolder : _value; OnTextChange(); }
                         break;
                 }
             }
