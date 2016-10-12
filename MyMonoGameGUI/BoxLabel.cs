@@ -11,12 +11,15 @@ namespace MyMonoGame.GUI
 
         public BoxLabel() { }
 
-        public BoxLabel(Rectangle pos, boxSprites backSprites, Colors colors, string text, SpriteFont font, Colors textColors, Label.textAlign align = Label.textAlign.centerCenter)
+        public BoxLabel(Rectangle pos, boxSprites backSprites, Colors colors, string text, SpriteFont font, Colors textColors, Label.textAlign align = Label.textAlign.centerCenter, bool enable = true, bool render = true, ElementLink parentLink = null)
         {
             _pos = pos;
             _backSprites = backSprites;
             _colors = colors;
             _label = new Label(pos, text, font, textColors, align);
+            isEnable = enable;
+            isRender = render;
+            parent = parentLink;
         }
 
         public override void Update(int x, int y, Mouse mouse, Keys key, bool isMaj, EventArgs e)

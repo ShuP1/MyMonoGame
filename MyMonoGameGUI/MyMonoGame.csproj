@@ -34,6 +34,7 @@
     <Reference Include="MonoGame.Framework, Version=3.5.1.1679, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="NVorbis, Version=0.8.4.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Box.cs" />
@@ -44,8 +45,10 @@
     <Compile Include="Button.cs" />
     <Compile Include="Colors.cs" />
     <Compile Include="Element.cs" />
+    <Compile Include="ElementLink.cs" />
     <Compile Include="KeyString.cs" />
     <Compile Include="Label.cs" />
+    <Compile Include="Manager.cs" />
     <Compile Include="Mouse.cs" />
     <Compile Include="TextField.cs" />
     <Compile Include="Texture.cs" />

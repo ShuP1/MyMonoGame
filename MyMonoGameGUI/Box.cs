@@ -10,11 +10,14 @@ namespace MyMonoGame.GUI
 
         public Box() { }
 
-        public Box(Rectangle pos, boxSprites backSprites, Colors colors)
+        public Box(Rectangle pos, boxSprites backSprites, Colors colors, bool enable = true, bool render = true, ElementLink parentLink = null)
         {
             _pos = pos;
             _backSprites = backSprites;
             _colors = colors;
+            isEnable = enable;
+            isRender = render;
+            parent = parentLink;
         }
 
         public override void Draw(SpriteBatch spriteBatch)

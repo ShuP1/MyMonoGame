@@ -12,12 +12,15 @@ namespace MyMonoGame.GUI
 
         public BoxButton() { }
 
-        public BoxButton(Rectangle pos, boxSprites backSprites, Colors colors, EventHandler click = null)
+        public BoxButton(Rectangle pos, boxSprites backSprites, Colors colors, EventHandler click = null, bool enable = true, bool render = true, ElementLink parentLink = null)
         {
             _pos = pos;
             _backSprites = backSprites;
             _colors = colors;
             _button = new Button(pos, click);
+            isEnable = enable;
+            isRender = render;
+            parent = parentLink;
         }
 
         public override void Update(int x, int y, Mouse mouse, Keys key, bool isMaj, EventArgs e)
