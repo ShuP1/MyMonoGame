@@ -46,19 +46,47 @@ namespace MyMonoGame.GUI
             }
 
             EventArgs e = new EventArgs();
-            foreach (Element element in elements.Values.ToArray())
+            foreach (ElementLink elementLink in elements.Keys.ToArray())
             {
-                bool isEnable = element.isEnable;
-                if (isEnable)
-                {
-                    ElementLink parent = element.parent;
-                    if (parent != null) { isEnable = Get(parent).isEnable; }
-                }
-
-                if (isEnable) {
-                    element.Update(mouseX, mouseY, nowState, key, Keyboard.GetState().IsKeyDown(Keys.LeftShift) || Keyboard.GetState().IsKeyDown(Keys.RightShift), e);
+                if (IsEnable(elementLink)) {
+                    elements[elementLink].Update(mouseX, mouseY, nowState, key, Keyboard.GetState().IsKeyDown(Keys.LeftShift) || Keyboard.GetState().IsKeyDown(Keys.RightShift), e);
                 }
             }
+        }
+
+        private bool IsEnable(ElementLink elementLink)
+        {
+            bool isEnable = elements[elementLink].isEnable;
+            if (isEnable)
+            {
+                ElementLink actualLink = elementLink;
+                while (isEnable)
+                {
+                    ElementLink parentLink = elements[actualLink].parent;
+                    if (parentLink != null)
+                    {
+                        Element parent = Get(parentLink);
+                        if (parent != null)
+                        {
+                            isEnable = parent.isEnable;
+                            if (isEnable)
+                            {
+                                actualLink = parentLink;
+                            }
+                        }
+                        else
+                        {
+                            isEnable = false;
+                            elements.Remove(actualLink);
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            return isEnable;
         }
 
         public void Clear()
@@ -94,7 +122,6 @@ namespace MyMonoGame.GUI
             }
             else
             {
-                Console.WriteLine("SetEnable Null");
                 throw new NullReferenceException();
             }
         }
@@ -107,25 +134,17 @@ namespace MyMonoGame.GUI
             }
             else
             {
-                Console.WriteLine("GetElement Null");
-                throw new NullReferenceException();
+                return null;
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (Element element in elements.Values.ToArray())
+            foreach (ElementLink elementLink in elements.Keys.ToArray())
             {
-                bool isEnable = element.isEnable;
-                if (isEnable)
+                if (IsEnable(elementLink))
                 {
-                    ElementLink parent = element.parent;
-                    if (parent != null) { isEnable = Get(parent).isEnable; }
-                }
-
-                if (isEnable)
-                {
-                    element.Draw(spriteBatch);
+                    elements[elementLink].Draw(spriteBatch);
                 }
             }
         }

@@ -11,7 +11,7 @@ namespace MyMonoGame.GUI
         internal bool _isHover = false;
         internal bool _isFocus = false;
         internal bool isEnable = true;
-        public ElementLink parent;
+        internal ElementLink parent;
 
         public Element(bool enable = true, ElementLink parentLink = null) {
             isEnable = enable;
