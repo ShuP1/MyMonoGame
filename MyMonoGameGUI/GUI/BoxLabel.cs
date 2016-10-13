@@ -27,10 +27,10 @@ namespace MyMonoGame.GUI
             _label.Update(x, y, mouse, key, isMaj, e);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, Vector relative)
         {
-            base.Draw(spriteBatch);
-            _label.Draw(spriteBatch);
+            base.Draw(spriteBatch, relative);
+            _label.Draw(spriteBatch, relative);
         }
     }
 }

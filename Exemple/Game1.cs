@@ -83,7 +83,8 @@ namespace Exemple
             Github = GuiManager.Add(new TextField(new MyMonoGame.Vector(ScreenWidth / 2, ScreenHeight / 2), null, basicFont, new MyMonoGame.Colors(Color.White, Color.WhiteSmoke, Color.LightGray), Label.textAlign.centerCenter, "Search on Github", SearchGithub, true, Home));
             GuiManager.Add(new BoxLabelButton(new Rectangle(ScreenWidth / 2 - 100, ScreenHeight * 3 / 4 + 50, 200, 40), boxSprite, new MyMonoGame.Colors(Color.White, Color.LightGray, Color.DarkGray), "About", basicFont, new MyMonoGame.Colors(Color.Black, Color.Black, Color.White), Label.textAlign.centerCenter, GoAbout, true, Home));
 
-            About = GuiManager.Add(new Box(new Rectangle(200, 100, ScreenWidth - 400, ScreenHeight - 200), boxSprite, new MyMonoGame.Colors(Color.LightGray, Color.White), false));
+            About = GuiManager.Add(new Element(false));
+            GuiManager.Add(new Box(new Rectangle(200, 100, ScreenWidth - 400, ScreenHeight - 200), boxSprite, new MyMonoGame.Colors(Color.LightGray, Color.White), true, About));
             GuiManager.Add(new Label(new MyMonoGame.Vector(ScreenWidth / 2, ScreenHeight / 4), "By Sheychen", basicFont, new MyMonoGame.Colors(Color.Red, Color.OrangeRed), Label.textAlign.centerCenter, true, About));
             GuiManager.Add(new BoxLabelButton(new Rectangle(ScreenWidth / 2 - 100, ScreenHeight  /2 - 100, 200, 40), boxSprite, new MyMonoGame.Colors(Color.White, Color.LightGray, Color.DarkGray), "My Website", basicFont, new MyMonoGame.Colors(Color.Black, Color.Black, Color.White), Label.textAlign.centerCenter, OpenWebsite, true, About));
             GuiManager.Add(new BoxLabelButton(new Rectangle(ScreenWidth / 2 - 100, ScreenHeight  /2 - 50, 200, 40), boxSprite, new MyMonoGame.Colors(Color.White, Color.LightGray, Color.DarkGray), "Show on GitHub", basicFont, new MyMonoGame.Colors(Color.Black, Color.Black, Color.White), Label.textAlign.centerCenter, OpenGithub, true, About));

@@ -26,7 +26,7 @@ namespace MyMonoGame.GUI
         public void Update()
         {
             oldState = newState;
-            newState = Microsoft.Xna.Framework.Input.Mouse.GetState();
+            newState = Mouse.GetState();
             mouseX = newState.X;
             mouseY = newState.Y;
             Utilities.Mouse nowState;
@@ -54,9 +54,16 @@ namespace MyMonoGame.GUI
             }
         }
 
-        private bool IsEnable(ElementLink elementLink)
+        public bool IsEnable(ElementLink elementLink)
+        {
+            Vector temp;
+            return IsEnable(elementLink ,out temp);
+        }
+
+        private bool IsEnable(ElementLink elementLink, out Vector relative)
         {
             bool isEnable = elements[elementLink].isEnable;
+            relative = new Vector();
             if (isEnable)
             {
                 ElementLink actualLink = elementLink;
@@ -71,6 +78,7 @@ namespace MyMonoGame.GUI
                             isEnable = parent.isEnable;
                             if (isEnable)
                             {
+                                relative.Add(parent.Pos());
                                 actualLink = parentLink;
                             }
                         }
@@ -142,9 +150,10 @@ namespace MyMonoGame.GUI
         {
             foreach (ElementLink elementLink in elements.Keys.ToArray())
             {
-                if (IsEnable(elementLink))
+                Vector relative;
+                if (IsEnable(elementLink, out relative))
                 {
-                    elements[elementLink].Draw(spriteBatch);
+                    elements[elementLink].Draw(spriteBatch, relative);
                 }
             }
         }

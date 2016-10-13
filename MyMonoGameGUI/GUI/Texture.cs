@@ -19,10 +19,10 @@ namespace MyMonoGame.GUI
             parent = parentLink;
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, Vector relative)
         {
             Color backColor = _isFocus ? _colors._focus : (_isHover ? _colors._hover : _colors._normal);
-            spriteBatch.Draw(_sprite, _pos, backColor);
+            spriteBatch.Draw(_sprite, new Rectangle(_pos.X + relative.X, _pos.Y + relative.Y, _pos.Width, _pos.Height), backColor);
         }
     }
 }

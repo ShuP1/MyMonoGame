@@ -148,10 +148,10 @@ namespace MyMonoGame.GUI
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, Vector relative)
         {
             Color color = _isFocus ? _colors._focus : (_isHover ? _colors._hover : _colors._normal);
-            spriteBatch.DrawString(_font, _text, new Vector2(_vector.X, _vector.Y), color);
+            spriteBatch.DrawString(_font, _text, new Vector2(_vector.X + relative.X, _vector.Y + relative.Y), color);
         }
     }
 }

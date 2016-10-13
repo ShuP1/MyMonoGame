@@ -30,7 +30,7 @@ namespace MyMonoGame.GUI
             return _pos.Contains(x, y);
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch, Vector relative)
         {
 
         }
@@ -47,6 +47,11 @@ namespace MyMonoGame.GUI
                 else { _isFocus = false; }
             }
             else { _isHover = Contain(x, y); }
+        }
+
+        public Vector Pos()
+        {
+            return new Vector(_pos.X, _pos.Y);
         }
 
         public virtual void Click(object sender, EventArgs e)

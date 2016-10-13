@@ -28,9 +28,9 @@ namespace MyMonoGame.GUI
             _button.Update(x, y, mouse, key, isMaj, e);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, Vector relative)
         {
-            base.Draw(spriteBatch);
+            base.Draw(spriteBatch, relative);
 
             if (_isFocus)
             {
@@ -44,7 +44,7 @@ namespace MyMonoGame.GUI
                 }
             }
 
-            _button.Draw(spriteBatch);
+            _button.Draw(spriteBatch, relative);
         }
     }
 }

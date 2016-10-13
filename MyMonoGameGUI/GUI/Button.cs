@@ -27,7 +27,7 @@ namespace MyMonoGame.GUI
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, Vector relative)
         {
             if (_isFocus)
             {
