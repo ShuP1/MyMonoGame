@@ -122,21 +122,21 @@ namespace Exemple
                     System.Diagnostics.Process.Start("https://github.com/search?q=" + Github);
                     Github = null;
                 }
-                showAbout = GUI.ButtonBoxLabel(new Rectangle(ScreenWidth / 2 - 100, ScreenHeight * 3 / 4 + 50, 200, 40), boxSprite, new MyMonoGame.Colors(Color.White, Color.LightGray, Color.DarkGray), "About", basicFont, new MyMonoGame.Colors(Color.Black, Color.Green));
+                showAbout = GUI.Button(new Rectangle(ScreenWidth / 2 - 100, ScreenHeight * 3 / 4 + 50, 200, 40), boxSprite, "About", basicFont, null ,new MyMonoGame.Colors(Color.Black, Color.Green));
             }
             else
             {
                 GUI.Box(new Rectangle(200, 100, ScreenWidth - 400, ScreenHeight - 200), boxSprite, new MyMonoGame.Colors(Color.LightGray, Color.White));
                 GUI.Label(new MyMonoGame.Vector(ScreenWidth / 2, ScreenHeight / 4), "By Sheychen", basicFont, new MyMonoGame.Colors(Color.Red, Color.OrangeRed),Manager.textAlign.centerCenter);
-                if(GUI.ButtonBoxLabel(new Rectangle(ScreenWidth / 2 - 100, ScreenHeight / 2 - 100, 200, 40), boxSprite, new MyMonoGame.Colors(Color.White, Color.LightGray, Color.DarkGray), "My website", basicFont, new MyMonoGame.Colors(Color.Black, Color.Black, Color.White)))
+                if(GUI.Button(new Rectangle(ScreenWidth / 2 - 100, ScreenHeight / 2 - 100, 200, 40), boxSprite, "My website", basicFont))
                 {
                     System.Diagnostics.Process.Start("https://sheychen.shost.ca");
                 }
-                if(GUI.ButtonBoxLabel(new Rectangle(ScreenWidth / 2 - 100, ScreenHeight / 2 - 50, 200, 40), boxSprite, new MyMonoGame.Colors(Color.White, Color.LightGray, Color.DarkGray), "Show on GitHub", basicFont, new MyMonoGame.Colors(Color.Black, Color.Black, Color.White)))
+                if(GUI.Button(new Rectangle(ScreenWidth / 2 - 100, ScreenHeight / 2 - 50, 200, 40), boxSprite, "Show on GitHub", basicFont))
                 {
                     System.Diagnostics.Process.Start("https://github.com/sheychen290/MyMonoGame");
                 }
-                showAbout = !GUI.ButtonBoxLabel(new Rectangle(ScreenWidth / 2 - 100, ScreenHeight / 2, 200, 40), boxSprite, new MyMonoGame.Colors(Color.White, Color.LightGray, Color.DarkGray), "Back", basicFont, new MyMonoGame.Colors(Color.Black, Color.Black, Color.White));
+                showAbout = !GUI.Button(new Rectangle(ScreenWidth / 2 - 100, ScreenHeight / 2, 200, 40), boxSprite, "Back", basicFont);
             }
 
             spriteBatch.DrawString(basicFont, "\\", new Vector2(Mouse.GetState().X, Mouse.GetState().Y), Color.Black);

@@ -23,6 +23,9 @@ namespace MyMonoGame.GUI
         public enum textAlign { topLeft, topCenter, topRight, centerLeft, centerCenter, centerRight, bottomLeft, bottomCenter, bottomRight };
         private SpriteBatch spriteBatch;
 
+        public Colors backgroundColors = new Colors(Color.White, Color.LightGray, Color.Gray);
+        public Colors textColors = new Colors(Color.Black, Color.Black, Color.White);
+
         public void Initialise()
         {
             Utilities.KeyString.InitializeKeyString();
@@ -190,8 +193,123 @@ namespace MyMonoGame.GUI
             return (placeHolder != null && (value == null || value == "")) ? placeHolder : value;
         }
 
-        public bool TextField(Rectangle pos, ref string value, SpriteFont font, Colors colors, textAlign align = textAlign.centerCenter, string placeHolder = null)
+        public void RenderBox(Rectangle pos, boxSprites backSprites, Color backColor)
         {
+            int leftWidth = backSprites.topLeft.Width;
+            int rightWidth = backSprites.topRight.Width;
+            int centerWidth = pos.Width - leftWidth - rightWidth;
+
+            int topHeight = backSprites.topLeft.Height;
+            int bottomHeight = backSprites.bottomLeft.Height;
+            int centerHeight = pos.Height - topHeight - bottomHeight;
+
+            spriteBatch.Draw(backSprites.topLeft, new Rectangle(pos.X, pos.Y, leftWidth, topHeight), backColor);
+            spriteBatch.Draw(backSprites.topCenter, new Rectangle(pos.X + leftWidth, pos.Y, centerWidth, topHeight), backColor);
+            spriteBatch.Draw(backSprites.topRight, new Rectangle(pos.X + pos.Width - rightWidth, pos.Y, rightWidth, topHeight), backColor);
+            spriteBatch.Draw(backSprites.centerLeft, new Rectangle(pos.X, pos.Y + topHeight, leftWidth, centerHeight), backColor);
+            spriteBatch.Draw(backSprites.centerCenter, new Rectangle(pos.X + leftWidth, pos.Y + topHeight, centerWidth, centerHeight), backColor);
+            spriteBatch.Draw(backSprites.centerRight, new Rectangle(pos.X + pos.Width - rightWidth, pos.Y + topHeight, rightWidth, centerHeight), backColor);
+            spriteBatch.Draw(backSprites.bottomLeft, new Rectangle(pos.X, pos.Y + pos.Height - bottomHeight, leftWidth, bottomHeight), backColor);
+            spriteBatch.Draw(backSprites.bottomCenter, new Rectangle(pos.X + leftWidth, pos.Y + pos.Height - bottomHeight, centerWidth, bottomHeight), backColor);
+            spriteBatch.Draw(backSprites.bottomRight, new Rectangle(pos.X + pos.Width - rightWidth, pos.Y + pos.Height - bottomHeight, rightWidth, bottomHeight), backColor);
+        }
+
+        public void ResetFocus()
+        {
+            lastFocusX = short.MinValue;
+            lastFocusY = short.MinValue;
+        }
+
+        /*================================================================================================================================================*/
+
+
+        public void Box(Rectangle pos, boxSprites backSprites, Colors colors = null)
+        {
+            if(colors == null) { colors = backgroundColors; }
+            Status status = GetStatus(pos);
+            Color backColor = colors.Get(status);
+            RenderBox(pos, backSprites, backColor);
+        }
+
+        public bool Button(Rectangle pos)
+        {
+            Status status = GetStatus(pos);
+            return status == Status.Active;
+        }
+
+        public bool Button(Rectangle pos, Texture2D texture, Colors colors = null)
+        {
+            if (colors == null) { colors = backgroundColors; }
+            Status status = GetStatus(pos);
+            Color backColor = colors.Get(status);
+            spriteBatch.Draw(texture, pos, backColor);
+            return status == Status.Active;
+        }
+
+
+        public bool Button(Rectangle pos, boxSprites backSprites, Colors colors = null)
+        {
+            if (colors == null) { colors = backgroundColors; }
+            Status status = GetStatus(pos);
+            Color backColor = colors.Get(status);
+            RenderBox(pos, backSprites, backColor);
+            return status == Status.Active;
+        }
+
+        public bool Button(Rectangle pos, string text, SpriteFont font, Colors colors = null, textAlign align = textAlign.centerCenter)
+        {
+            Status status = GetStatus(pos);
+            Label(pos, text, font, colors, align);
+            return status == Status.Active;
+        }
+
+        public bool Button(Vector vector, string text, SpriteFont font, Colors colors = null, textAlign align = textAlign.bottomRight)
+        {
+            Vector v = GetLabelPos(new Rectangle(vector.X, vector.Y, 0, 0), align, font, text);
+            Status status = GetStatus(new Rectangle(v.X, v.Y, (int)font.MeasureString(text).X, (int)font.MeasureString(text).Y));
+            Label(vector, text, font, colors, align);
+            return status == Status.Active;
+        }
+
+        public bool Button(Rectangle pos, boxSprites backSprites, string text, SpriteFont font, Colors colors = null, Colors textcolors = null, textAlign align = textAlign.centerCenter)
+        {
+            if (colors == null) { colors = backgroundColors; }
+            Status status = GetStatus(pos);
+            Color backColor = colors.Get(status);
+            RenderBox(pos, backSprites, backColor);
+            Label(pos, text, font, textcolors, align);
+            return status == Status.Active;
+        }
+
+        public void Texture(Rectangle pos, Texture2D texture, Colors colors = null)
+        {
+            if (colors == null) { colors = backgroundColors; }
+            Status status = GetStatus(pos);
+            Color backColor = colors.Get(status);
+            spriteBatch.Draw(texture, pos, backColor);
+        }
+
+        public void Label(Rectangle pos, string text, SpriteFont font, Colors colors = null, textAlign align = textAlign.centerCenter)
+        {
+            if (colors == null) { colors = textColors; }
+            Vector v = GetLabelPos(pos, align, font, text);
+            Status status = GetStatus(pos);
+            Color backColor = colors.Get(status);
+            spriteBatch.DrawString(font, text, new Vector2(v.X, v.Y), backColor);
+        }
+
+        public void Label(Vector vector, string text, SpriteFont font, Colors colors = null, textAlign align = textAlign.bottomRight)
+        {
+            if (colors == null) { colors = textColors; }
+            Vector v = GetLabelPos(new Rectangle(vector.X, vector.Y, 0, 0), align, font, text);
+            Status status = GetStatus(new Rectangle(v.X, v.Y, (int)font.MeasureString(text).X, (int)font.MeasureString(text).Y));
+            Color backColor = colors.Get(status);
+            spriteBatch.DrawString(font, text, new Vector2(v.X, v.Y), backColor);
+        }
+
+        public bool TextField(Rectangle pos, ref string value, SpriteFont font, Colors colors = null, textAlign align = textAlign.centerCenter, string placeHolder = null)
+        {
+            if (colors == null) { colors = textColors; }
             string _text = fieldText(value, placeHolder);
             Vector v = GetLabelPos(pos, align, font, _text);
             Status status = GetStatus(pos);
@@ -226,8 +344,9 @@ namespace MyMonoGame.GUI
             return nowKey == Keys.Enter;
         }
 
-        public bool TextField(Vector vector, ref string value, SpriteFont font, Colors colors, textAlign align = textAlign.bottomRight, string placeHolder = null)
+        public bool TextField(Vector vector, ref string value, SpriteFont font, Colors colors = null, textAlign align = textAlign.bottomRight, string placeHolder = null)
         {
+            if (colors == null) { colors = textColors; }
             string _text = fieldText(value, placeHolder);
             Vector v = GetLabelPos(new Rectangle(vector.X, vector.Y, 0, 0), align, font, _text);
             Status status = GetStatus(new Rectangle(v.X, v.Y, (int)font.MeasureString(_text).X, (int)font.MeasureString(_text).Y));
@@ -260,94 +379,6 @@ namespace MyMonoGame.GUI
             Color backColor = colors.Get(status);
             spriteBatch.DrawString(font, _text, new Vector2(v.X, v.Y), backColor);
             return nowKey == Keys.Enter;
-        }
-
-        public void Label(Rectangle pos, string text, SpriteFont font, Colors colors, textAlign align = textAlign.centerCenter)
-        {
-            Vector v = GetLabelPos(pos, align, font, text);
-            Status status = GetStatus(pos);
-            Color backColor = colors.Get(status);
-            spriteBatch.DrawString(font, text, new Vector2(v.X, v.Y), backColor);
-        }
-
-        public void ResetFocus()
-        {
-            lastFocusX = short.MinValue;
-            lastFocusY = short.MinValue;
-        }
-
-        public void Label(Vector vector, string text, SpriteFont font, Colors colors, textAlign align = textAlign.bottomRight)
-        {
-            Vector v = GetLabelPos(new Rectangle(vector.X, vector.Y, 0,0), align, font, text);
-            Status status = GetStatus(new Rectangle(v.X, v.Y, (int)font.MeasureString(text).X, (int)font.MeasureString(text).Y));
-            Color backColor = colors.Get(status);
-            spriteBatch.DrawString(font, text, new Vector2(v.X, v.Y), backColor);
-        }
-
-        public void Texture(Rectangle pos, Texture2D texture, Colors colors)
-        {
-            Status status = GetStatus(pos);
-            Color backColor = colors.Get(status);
-            spriteBatch.Draw(texture, pos, backColor);
-        }
-
-        public bool ButtonTexture(Rectangle pos, Texture2D texture, Colors colors)
-        {
-            Status status = GetStatus(pos);
-            Color backColor = colors.Get(status);
-            spriteBatch.Draw(texture, pos, backColor);
-            return status == Status.Active;
-        }
-
-        public bool Button(Rectangle pos)
-        {
-            Status status = GetStatus(pos);
-            return status == Status.Active;
-        }
-
-        public bool ButtonBoxLabel(Rectangle pos, boxSprites backSprites, Colors colors, string text, SpriteFont font, Colors textColors, textAlign align = textAlign.centerCenter)
-        {
-            Status status = GetStatus(pos);
-            Color backColor = colors.Get(status);
-            RenderBox(pos, backSprites, backColor);
-            Label(pos, text, font, textColors, align);
-            return status == Status.Active;
-        }
-
-        public bool ButtonBox(Rectangle pos, boxSprites backSprites, Colors colors)
-        {
-            Status status = GetStatus(pos);
-            Color backColor = colors.Get(status);
-            RenderBox(pos, backSprites, backColor);
-            return status == Status.Active;
-        }
-
-        public void Box(Rectangle pos, boxSprites backSprites, Colors colors)
-        {
-            Status status = GetStatus(pos);
-            Color backColor = colors.Get(status);
-            RenderBox(pos, backSprites, backColor);
-        }
-
-        public void RenderBox(Rectangle pos, boxSprites backSprites, Color backColor)
-        {
-            int leftWidth = backSprites.topLeft.Width;
-            int rightWidth = backSprites.topRight.Width;
-            int centerWidth = pos.Width - leftWidth - rightWidth;
-
-            int topHeight = backSprites.topLeft.Height;
-            int bottomHeight = backSprites.bottomLeft.Height;
-            int centerHeight = pos.Height - topHeight - bottomHeight;
-
-            spriteBatch.Draw(backSprites.topLeft, new Rectangle(pos.X, pos.Y, leftWidth, topHeight), backColor);
-            spriteBatch.Draw(backSprites.topCenter, new Rectangle(pos.X + leftWidth, pos.Y, centerWidth, topHeight), backColor);
-            spriteBatch.Draw(backSprites.topRight, new Rectangle(pos.X + pos.Width - rightWidth, pos.Y, rightWidth, topHeight), backColor);
-            spriteBatch.Draw(backSprites.centerLeft, new Rectangle(pos.X, pos.Y + topHeight, leftWidth, centerHeight), backColor);
-            spriteBatch.Draw(backSprites.centerCenter, new Rectangle(pos.X + leftWidth, pos.Y + topHeight, centerWidth, centerHeight), backColor);
-            spriteBatch.Draw(backSprites.centerRight, new Rectangle(pos.X + pos.Width - rightWidth, pos.Y + topHeight, rightWidth, centerHeight), backColor);
-            spriteBatch.Draw(backSprites.bottomLeft, new Rectangle(pos.X, pos.Y + pos.Height - bottomHeight, leftWidth, bottomHeight), backColor);
-            spriteBatch.Draw(backSprites.bottomCenter, new Rectangle(pos.X + leftWidth, pos.Y + pos.Height - bottomHeight, centerWidth, bottomHeight), backColor);
-            spriteBatch.Draw(backSprites.bottomRight, new Rectangle(pos.X + pos.Width - rightWidth, pos.Y + pos.Height - bottomHeight, rightWidth, bottomHeight), backColor);
         }
     }
 }
