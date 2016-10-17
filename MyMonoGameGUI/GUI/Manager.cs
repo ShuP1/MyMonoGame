@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using System.Text;
 
 namespace MyMonoGame.GUI
 {
@@ -64,7 +65,7 @@ namespace MyMonoGame.GUI
             spriteBatch = _spriteBatch;
         }
 
-        private Status GetStatus(Rectangle pos)
+        private Status GetStatus(Rectangle pos, string type)
         {
             if (nowState.leftPress)
             {
@@ -220,37 +221,60 @@ namespace MyMonoGame.GUI
             lastFocusY = short.MinValue;
         }
 
+        /// <summary>
+        /// Remove unprintable chars
+        /// </summary>
+        private void clearString( ref string _text, SpriteFont _font)
+        {
+            StringBuilder sb = new StringBuilder(_text);
+            for (int i = 0; i < sb.Length; i++)
+            {
+                if (!_font.Characters.Contains(sb[i])) {
+                    switch (sb[i])
+                    {
+                        case 'ô':
+                            sb[i] = 'o';
+                            break;
+
+                        default:
+                            sb[i] = ' ';
+                            break;
+                    }
+                }
+            }
+            _text = sb.ToString();
+        }
+
         /*================================================================================================================================================*/
 
 
         public void Box(Rectangle pos, boxSprites backSprites, Colors colors = null)
         {
             if(colors == null) { colors = backgroundColors; }
-            Status status = GetStatus(pos);
+            Status status = GetStatus(pos, "Box");
             Color backColor = colors.Get(status);
             RenderBox(pos, backSprites, backColor);
         }
 
         public bool Button(Rectangle pos)
         {
-            Status status = GetStatus(pos);
+            Status status = GetStatus(pos, "Button");
             return status == Status.Active;
         }
 
         public bool Button(Rectangle pos, Texture2D texture, Colors colors = null)
         {
             if (colors == null) { colors = backgroundColors; }
-            Status status = GetStatus(pos);
+            Status status = GetStatus(pos, "Button");
             Color backColor = colors.Get(status);
             spriteBatch.Draw(texture, pos, backColor);
             return status == Status.Active;
         }
 
-
         public bool Button(Rectangle pos, boxSprites backSprites, Colors colors = null)
         {
             if (colors == null) { colors = backgroundColors; }
-            Status status = GetStatus(pos);
+            Status status = GetStatus(pos, "Button");
             Color backColor = colors.Get(status);
             RenderBox(pos, backSprites, backColor);
             return status == Status.Active;
@@ -258,23 +282,26 @@ namespace MyMonoGame.GUI
 
         public bool Button(Rectangle pos, string text, SpriteFont font, Colors colors = null, textAlign align = textAlign.centerCenter)
         {
-            Status status = GetStatus(pos);
+            clearString(ref text, font);
+            Status status = GetStatus(pos, "Button");
             Label(pos, text, font, colors, align);
             return status == Status.Active;
         }
 
         public bool Button(Vector vector, string text, SpriteFont font, Colors colors = null, textAlign align = textAlign.bottomRight)
         {
+            clearString(ref text, font);
             Vector v = GetLabelPos(new Rectangle(vector.X, vector.Y, 0, 0), align, font, text);
-            Status status = GetStatus(new Rectangle(v.X, v.Y, (int)font.MeasureString(text).X, (int)font.MeasureString(text).Y));
+            Status status = GetStatus(new Rectangle(v.X, v.Y, (int)font.MeasureString(text).X, (int)font.MeasureString(text).Y), "Button");
             Label(vector, text, font, colors, align);
             return status == Status.Active;
         }
 
         public bool Button(Rectangle pos, boxSprites backSprites, string text, SpriteFont font, Colors colors = null, Colors textcolors = null, textAlign align = textAlign.centerCenter)
         {
+            clearString(ref text, font);
             if (colors == null) { colors = backgroundColors; }
-            Status status = GetStatus(pos);
+            Status status = GetStatus(pos, "Button");
             Color backColor = colors.Get(status);
             RenderBox(pos, backSprites, backColor);
             Label(pos, text, font, textcolors, align);
@@ -284,25 +311,27 @@ namespace MyMonoGame.GUI
         public void Texture(Rectangle pos, Texture2D texture, Colors colors = null)
         {
             if (colors == null) { colors = backgroundColors; }
-            Status status = GetStatus(pos);
+            Status status = GetStatus(pos, "Button");
             Color backColor = colors.Get(status);
             spriteBatch.Draw(texture, pos, backColor);
         }
 
         public void Label(Rectangle pos, string text, SpriteFont font, Colors colors = null, textAlign align = textAlign.centerCenter)
         {
+            clearString(ref text, font);
             if (colors == null) { colors = textColors; }
             Vector v = GetLabelPos(pos, align, font, text);
-            Status status = GetStatus(pos);
+            Status status = GetStatus(pos, "Button");
             Color backColor = colors.Get(status);
             spriteBatch.DrawString(font, text, new Vector2(v.X, v.Y), backColor);
         }
 
         public void Label(Vector vector, string text, SpriteFont font, Colors colors = null, textAlign align = textAlign.bottomRight)
         {
+            clearString(ref text, font);
             if (colors == null) { colors = textColors; }
             Vector v = GetLabelPos(new Rectangle(vector.X, vector.Y, 0, 0), align, font, text);
-            Status status = GetStatus(new Rectangle(v.X, v.Y, (int)font.MeasureString(text).X, (int)font.MeasureString(text).Y));
+            Status status = GetStatus(new Rectangle(v.X, v.Y, (int)font.MeasureString(text).X, (int)font.MeasureString(text).Y), "Button");
             Color backColor = colors.Get(status);
             spriteBatch.DrawString(font, text, new Vector2(v.X, v.Y), backColor);
         }
@@ -311,8 +340,9 @@ namespace MyMonoGame.GUI
         {
             if (colors == null) { colors = textColors; }
             string _text = fieldText(value, placeHolder);
+            clearString(ref _text, font);
             Vector v = GetLabelPos(pos, align, font, _text);
-            Status status = GetStatus(pos);
+            Status status = GetStatus(pos, "Button");
             if(status == Status.Focus)
             {
                 //Only QWERTY support wait monogame 4.6 (https://github.com/MonoGame/MonoGame/issues/3836)
@@ -348,8 +378,9 @@ namespace MyMonoGame.GUI
         {
             if (colors == null) { colors = textColors; }
             string _text = fieldText(value, placeHolder);
+            clearString(ref _text, font);
             Vector v = GetLabelPos(new Rectangle(vector.X, vector.Y, 0, 0), align, font, _text);
-            Status status = GetStatus(new Rectangle(v.X, v.Y, (int)font.MeasureString(_text).X, (int)font.MeasureString(_text).Y));
+            Status status = GetStatus(new Rectangle(v.X, v.Y, (int)font.MeasureString(_text).X, (int)font.MeasureString(_text).Y), "Button");
             if (status == Status.Focus)
             {
                 //Only QWERTY support wait monogame 4.6 (https://github.com/MonoGame/MonoGame/issues/3836)
