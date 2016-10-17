@@ -24,8 +24,9 @@ namespace MyMonoGame.GUI
         public enum textAlign { topLeft, topCenter, topRight, centerLeft, centerCenter, centerRight, bottomLeft, bottomCenter, bottomRight };
         private SpriteBatch spriteBatch;
 
-        public Colors backgroundColors = new Colors(Color.White, Color.LightGray, Color.Gray);
-        public Colors textColors = new Colors(Color.Black, Color.Black, Color.White);
+        public Colors boxColors = new Colors(Color.White);
+        public Colors buttonColors = new Colors(Color.LightGray, Color.White, Color.Gray);
+        public Colors textColors = new Colors(Color.Black);
 
         public void Initialise()
         {
@@ -233,6 +234,7 @@ namespace MyMonoGame.GUI
                     switch (sb[i])
                     {
                         case 'ô':
+                        case 'ö':
                             sb[i] = 'o';
                             break;
 
@@ -250,7 +252,7 @@ namespace MyMonoGame.GUI
 
         public void Box(Rectangle pos, boxSprites backSprites, Colors colors = null)
         {
-            if(colors == null) { colors = backgroundColors; }
+            if(colors == null) { colors = boxColors; }
             Status status = GetStatus(pos, "Box");
             Color backColor = colors.Get(status);
             RenderBox(pos, backSprites, backColor);
@@ -264,7 +266,7 @@ namespace MyMonoGame.GUI
 
         public bool Button(Rectangle pos, Texture2D texture, Colors colors = null)
         {
-            if (colors == null) { colors = backgroundColors; }
+            if (colors == null) { colors = buttonColors; }
             Status status = GetStatus(pos, "Button");
             Color backColor = colors.Get(status);
             spriteBatch.Draw(texture, pos, backColor);
@@ -273,7 +275,7 @@ namespace MyMonoGame.GUI
 
         public bool Button(Rectangle pos, boxSprites backSprites, Colors colors = null)
         {
-            if (colors == null) { colors = backgroundColors; }
+            if (colors == null) { colors = buttonColors; }
             Status status = GetStatus(pos, "Button");
             Color backColor = colors.Get(status);
             RenderBox(pos, backSprites, backColor);
@@ -300,7 +302,7 @@ namespace MyMonoGame.GUI
         public bool Button(Rectangle pos, boxSprites backSprites, string text, SpriteFont font, Colors colors = null, Colors textcolors = null, textAlign align = textAlign.centerCenter)
         {
             clearString(ref text, font);
-            if (colors == null) { colors = backgroundColors; }
+            if (colors == null) { colors = buttonColors; }
             Status status = GetStatus(pos, "Button");
             Color backColor = colors.Get(status);
             RenderBox(pos, backSprites, backColor);
@@ -310,7 +312,7 @@ namespace MyMonoGame.GUI
 
         public void Texture(Rectangle pos, Texture2D texture, Colors colors = null)
         {
-            if (colors == null) { colors = backgroundColors; }
+            if (colors == null) { colors = boxColors; }
             Status status = GetStatus(pos, "Button");
             Color backColor = colors.Get(status);
             spriteBatch.Draw(texture, pos, backColor);
