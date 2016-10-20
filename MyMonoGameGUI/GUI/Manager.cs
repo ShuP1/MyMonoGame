@@ -230,17 +230,21 @@ namespace MyMonoGame.GUI
             StringBuilder sb = new StringBuilder(_text);
             for (int i = 0; i < sb.Length; i++)
             {
-                if (!_font.Characters.Contains(sb[i])) {
-                    switch (sb[i])
+                if (sb[i] != '\r' && sb[i] != '\n')
+                {
+                    if (!_font.Characters.Contains(sb[i]))
                     {
-                        case 'ô':
-                        case 'ö':
-                            sb[i] = 'o';
-                            break;
+                        switch (sb[i])
+                        {
+                            case 'ô':
+                            case 'ö':
+                                sb[i] = 'o';
+                                break;
 
-                        default:
-                            sb[i] = ' ';
-                            break;
+                            default:
+                                sb[i] = ' ';
+                                break;
+                        }
                     }
                 }
             }
