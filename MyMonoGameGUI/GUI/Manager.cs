@@ -222,6 +222,26 @@ namespace MyMonoGame.GUI
             lastFocusY = short.MinValue;
         }
 
+        private void parseText(ref string text, SpriteFont font, int width)
+        {
+            string line = string.Empty;
+            string returnString = string.Empty;
+            string[] wordArray = text.Split(' ');
+
+            foreach (string word in wordArray)
+            {
+                if (font.MeasureString(line + word).Length() > width)
+                {
+                    returnString = returnString + line + Environment.NewLine;
+                    line = string.Empty;
+                }
+
+                line = line + word + ' ';
+            }
+
+            text = returnString + line;
+        }
+
         /// <summary>
         /// Remove unprintable chars
         /// </summary>
@@ -322,9 +342,10 @@ namespace MyMonoGame.GUI
             spriteBatch.Draw(texture, pos, backColor);
         }
 
-        public void Label(Rectangle pos, string text, SpriteFont font, Colors colors = null, textAlign align = textAlign.centerCenter)
+        public void Label(Rectangle pos, string text, SpriteFont font, Colors colors = null, textAlign align = textAlign.centerCenter, bool wrapping = false)
         {
             clearString(ref text, font);
+            if (wrapping) { if (align == textAlign.topLeft) { parseText(ref text, font, pos.Width); } }
             if (colors == null) { colors = textColors; }
             Vector v = GetLabelPos(pos, align, font, text);
             Status status = GetStatus(pos, "Button");
