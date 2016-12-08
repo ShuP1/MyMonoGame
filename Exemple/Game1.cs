@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MyMonoGame.GUI;
+using MyMonoGame.GUI; //Import MyMonoGame
 
 namespace Exemple
 {
@@ -12,18 +11,18 @@ namespace Exemple
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        ContentManager content;
-
-        SpriteFont basicFont;
-        boxSprites boxSprite;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
+        private ContentManager content;
 
         private int ScreenWidth = 1080;
         private int ScreenHeight = 720;
 
-        Manager GUI = new Manager();
+        private Manager GUI = new Manager(); //Gui manager
+
+        //InGame Values
         private string Github = null;
+
         private bool showAbout = false;
 
         public Game1()
@@ -47,6 +46,7 @@ namespace Exemple
         {
             // TODO: Add your initialization logic here
             GUI.Initialise();
+
             base.Initialize();
         }
 
@@ -59,19 +59,11 @@ namespace Exemple
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            GUI.content.Initialise(content, GraphicsDevice);
 
-            basicFont = content.Load<SpriteFont>("basic");
+            GUI.content.AddFont("basic"); //Load "Fonts/basic"
 
-            boxSprite.topLeft = content.Load<Texture2D>("Textures/topLeft");
-            boxSprite.topCenter = content.Load<Texture2D>("Textures/topCenter");
-            boxSprite.topRight = content.Load<Texture2D>("Textures/topRight");
-            boxSprite.centerLeft = content.Load<Texture2D>("Textures/centerLeft");
-            boxSprite.centerCenter = content.Load<Texture2D>("Textures/centerCenter");
-            boxSprite.centerRight = content.Load<Texture2D>("Textures/centerRight");
-            boxSprite.bottomLeft = content.Load<Texture2D>("Textures/bottomLeft");
-            boxSprite.bottomCenter = content.Load<Texture2D>("Textures/bottomCenter");
-            boxSprite.bottomRight = content.Load<Texture2D>("Textures/bottomRight");
+            GUI.content.AddBox("Box", "0"); //Load all files in "Textures/0/"
         }
 
         /// <summary>
@@ -90,7 +82,7 @@ namespace Exemple
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || GUI.keyboard.IsPressed(Keys.Escape))
                 Exit();
 
             // TODO: Add your update logic here
@@ -116,30 +108,30 @@ namespace Exemple
 
             if (!showAbout)
             {
-                GUI.Label(new MyMonoGame.Vector(ScreenWidth / 2, ScreenHeight / 4), "MyMonoGame", basicFont, new MyMonoGame.Colors(Color.Black, Color.Green), Manager.textAlign.centerCenter);
-                if(GUI.TextField(new MyMonoGame.Vector(ScreenWidth / 2, ScreenHeight / 2), ref Github, basicFont, new MyMonoGame.Colors(Color.White, Color.WhiteSmoke, Color.LightGray), Manager.textAlign.centerCenter, "Search on Github"))
+                GUI.Label(new MyMonoGame.Vector(ScreenWidth / 2, ScreenHeight / 4), "MyMonoGame", GUI.content.GetFont("basic"), new MyMonoGame.Colors(Color.Black, Color.Green), Manager.textAlign.centerCenter);
+                if (GUI.TextField(new MyMonoGame.Vector(ScreenWidth / 2, ScreenHeight / 2), ref Github, GUI.content.GetFont("basic"), new MyMonoGame.Colors(Color.White, Color.WhiteSmoke, Color.LightGray), Manager.textAlign.centerCenter, "Search on Github"))
                 {
                     System.Diagnostics.Process.Start("https://github.com/search?q=" + Github);
                     Github = null;
                 }
-                showAbout = GUI.Button(new Rectangle(ScreenWidth / 2 - 100, ScreenHeight * 3 / 4 + 50, 200, 40), boxSprite, "About", basicFont, null ,new MyMonoGame.Colors(Color.Black, Color.Green));
+                showAbout = GUI.Button(new Rectangle(ScreenWidth / 2 - 100, ScreenHeight * 3 / 4 + 50, 200, 40), GUI.content.GetBox("Box"), "About", GUI.content.GetFont("basic"), null, new MyMonoGame.Colors(Color.Black, Color.Green));
             }
             else
             {
-                GUI.Box(new Rectangle(200, 100, ScreenWidth - 400, ScreenHeight - 200), boxSprite, new MyMonoGame.Colors(Color.LightGray, Color.White));
-                GUI.Label(new MyMonoGame.Vector(ScreenWidth / 2, ScreenHeight / 4), "By Sheychen", basicFont, new MyMonoGame.Colors(Color.Red, Color.OrangeRed),Manager.textAlign.centerCenter);
-                if(GUI.Button(new Rectangle(ScreenWidth / 2 - 100, ScreenHeight / 2 - 100, 200, 40), boxSprite, "My website", basicFont))
+                GUI.Box(new Rectangle(200, 100, ScreenWidth - 400, ScreenHeight - 200), GUI.content.GetBox("Box"), new MyMonoGame.Colors(Color.LightGray, Color.White));
+                GUI.Label(new MyMonoGame.Vector(ScreenWidth / 2, ScreenHeight / 4), "By Sheychen", GUI.content.GetFont("basic"), new MyMonoGame.Colors(Color.Red, Color.OrangeRed), Manager.textAlign.centerCenter);
+                if (GUI.Button(new Rectangle(ScreenWidth / 2 - 100, ScreenHeight / 2 - 100, 200, 40), GUI.content.GetBox("Box"), "My website", GUI.content.GetFont("basic")))
                 {
                     System.Diagnostics.Process.Start("https://sheychen.shost.ca");
                 }
-                if(GUI.Button(new Rectangle(ScreenWidth / 2 - 100, ScreenHeight / 2 - 50, 200, 40), boxSprite, "Show on GitHub", basicFont))
+                if (GUI.Button(new Rectangle(ScreenWidth / 2 - 100, ScreenHeight / 2 - 50, 200, 40), GUI.content.GetBox("Box"), "Show on GitHub", GUI.content.GetFont("basic")))
                 {
                     System.Diagnostics.Process.Start("https://github.com/sheychen290/MyMonoGame");
                 }
-                showAbout = !GUI.Button(new Rectangle(ScreenWidth / 2 - 100, ScreenHeight / 2, 200, 40), boxSprite, "Back", basicFont);
+                showAbout = !GUI.Button(new Rectangle(ScreenWidth / 2 - 100, ScreenHeight / 2, 200, 40), GUI.content.GetBox("Box"), "Back", GUI.content.GetFont("basic"));
             }
 
-            spriteBatch.DrawString(basicFont, "\\", new Vector2(Mouse.GetState().X, Mouse.GetState().Y), Color.Black);
+            spriteBatch.DrawString(GUI.content.GetFont("basic"), "\\", new Vector2(GUI.mouse.X, GUI.mouse.Y), Color.Black);
 
             spriteBatch.End();
 

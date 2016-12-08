@@ -1,30 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using System;
 using System.Text;
 
 namespace MyMonoGame.GUI
 {
+    /// <summary>
+    /// Main GUI Class
+    /// </summary>
     public class Manager
     {
-        private int mouseX;
-        private int mouseY;
-        private Keys[] newKeys;
-        private MouseState newState;
-        private Keys[] oldKeys;
-        private Keys nowKey;
-        private MouseState oldState;
-        private Utilities.Mouse nowState;
+        public Utilities.Content content = new Utilities.Content();
+        public Utilities.Keyboard keyboard = new Utilities.Keyboard();
+        public Utilities.Mouse mouse = new Utilities.Mouse();
+
+        //Last Focus(Left Click) Position
         private int lastFocusX = short.MinValue;
+
         private int lastFocusY = short.MinValue;
+
         internal enum Status { Normal, Hover, Active, Focus }
+
         public enum textAlign { topLeft, topCenter, topRight, centerLeft, centerCenter, centerRight, bottomLeft, bottomCenter, bottomRight };
+
         private SpriteBatch spriteBatch;
 
+        //Default colors
         public Colors boxColors = new Colors(Color.White);
+
         public Colors buttonColors = new Colors(Color.LightGray, Color.White, Color.Gray);
         public Colors textColors = new Colors(Color.Black);
 
@@ -33,69 +37,48 @@ namespace MyMonoGame.GUI
             Utilities.KeyString.InitializeKeyString();
         }
 
+        /// <summary>
+        /// Execute in each Game.Update()
+        /// </summary>
         public void Update()
         {
-            oldState = newState;
-            newState = Mouse.GetState();
-            mouseX = newState.X;
-            mouseY = newState.Y;
-            nowState.leftPress = (oldState.LeftButton == ButtonState.Released && newState.LeftButton == ButtonState.Pressed);
-            nowState.leftRelease = (oldState.LeftButton == ButtonState.Pressed && newState.LeftButton == ButtonState.Released);
-            nowState.rightPress = (oldState.LeftButton == ButtonState.Released && newState.LeftButton == ButtonState.Pressed);
-            nowState.rightRelease = (oldState.LeftButton == ButtonState.Pressed && newState.LeftButton == ButtonState.Released);
+            mouse.Update();
+            keyboard.Update();
 
-            oldKeys = newKeys;
-            newKeys = Keyboard.GetState().GetPressedKeys();
-
-            nowKey = Keys.None;
-
-            foreach (Keys newKey in newKeys)
+            if (mouse.IsPressed(Utilities.Mouse.Clicks.Left))
             {
-                if (!oldKeys.Contains(newKey)) { nowKey = newKey; }
-            }
-
-            if (nowState.leftPress)
-            {
-                lastFocusX = mouseX;
-                lastFocusY = mouseY;
+                lastFocusX = mouse.X;
+                lastFocusY = mouse.Y;
             }
         }
 
+        /// <summary>
+        /// Execute Before Button, Label, ...
+        /// </summary>
+        /// <param name="_spriteBatch">Actual SpriteBatch</param>
         public void Draw(SpriteBatch _spriteBatch)
         {
             spriteBatch = _spriteBatch;
         }
 
-        private Status GetStatus(Rectangle pos, string type)
+        private Status GetStatus(Rectangle pos)
         {
-            if (nowState.leftPress)
+            if (mouse.IsPressed(Utilities.Mouse.Clicks.Left))
             {
-                if (pos.Contains(mouseX, mouseY))
-                {
+                if (pos.Contains(mouse.X, mouse.Y))
                     return Status.Active;
-                }
-                else
-                {
-                    return Status.Normal;
-                }
+
+                return Status.Normal;
             }
             else
             {
                 if (pos.Contains(lastFocusX, lastFocusY))
-                {
                     return Status.Focus;
-                }
-                else
-                {
-                    if (pos.Contains(mouseX, mouseY))
-                    {
-                        return Status.Hover;
-                    }
-                    else
-                    {
-                        return Status.Normal;
-                    }
-                }
+
+                if (pos.Contains(mouse.X, mouse.Y))
+                    return Status.Hover;
+
+                return Status.Normal;
             }
         }
 
@@ -106,84 +89,57 @@ namespace MyMonoGame.GUI
             {
                 case textAlign.topLeft:
                     if (isVector)
-                    {
                         return new Vector(_pos.X - (int)_font.MeasureString(_text).X, _pos.Y - (int)_font.MeasureString(_text).Y);
-                    }
-                    else {
-                        return new Vector(_pos.X, _pos.Y);
-                    }
+
+                    return new Vector(_pos.X, _pos.Y);
 
                 case textAlign.topCenter:
                     if (isVector)
-                    {
                         return new Vector(_pos.X - (int)_font.MeasureString(_text).X / 2, _pos.Y - (int)_font.MeasureString(_text).Y);
-                    }
-                    else {
-                        return new Vector(_pos.X + _pos.Width / 2 - (int)_font.MeasureString(_text).X / 2, _pos.Y);
-                    }
+
+                    return new Vector(_pos.X + _pos.Width / 2 - (int)_font.MeasureString(_text).X / 2, _pos.Y);
 
                 case textAlign.topRight:
                     if (isVector)
-                    {
                         return new Vector(_pos.X, _pos.Y - (int)_font.MeasureString(_text).Y);
-                    }
-                    else {
-                        return new Vector(_pos.X + _pos.Width - (int)_font.MeasureString(_text).X, _pos.Y);
-                    }
+
+                    return new Vector(_pos.X + _pos.Width - (int)_font.MeasureString(_text).X, _pos.Y);
 
                 case textAlign.centerLeft:
                     if (isVector)
-                    {
                         return new Vector(_pos.X - (int)_font.MeasureString(_text).X, _pos.Y - (int)_font.MeasureString(_text).Y / 2);
-                    }
-                    else {
-                        return new Vector(_pos.X, _pos.Y + _pos.Height / 2 - (int)_font.MeasureString(_text).Y / 2);
-                    }
+
+                    return new Vector(_pos.X, _pos.Y + _pos.Height / 2 - (int)_font.MeasureString(_text).Y / 2);
 
                 case textAlign.centerCenter:
                     if (isVector)
-                    {
                         return new Vector(_pos.X - (int)_font.MeasureString(_text).X / 2, _pos.Y - (int)_font.MeasureString(_text).Y / 2);
-                    }
-                    else {
-                        return new Vector(_pos.X + _pos.Width / 2 - (int)_font.MeasureString(_text).X / 2, _pos.Y + _pos.Height / 2 - (int)_font.MeasureString(_text).Y / 2);
-                    }
+
+                    return new Vector(_pos.X + _pos.Width / 2 - (int)_font.MeasureString(_text).X / 2, _pos.Y + _pos.Height / 2 - (int)_font.MeasureString(_text).Y / 2);
 
                 case textAlign.centerRight:
                     if (isVector)
-                    {
                         return new Vector(_pos.X, _pos.Y - (int)_font.MeasureString(_text).Y / 2);
-                    }
-                    else {
-                        return new Vector(_pos.X + _pos.Width - (int)_font.MeasureString(_text).X, _pos.Y + _pos.Height / 2 - (int)_font.MeasureString(_text).Y / 2);
-                    }
+
+                    return new Vector(_pos.X + _pos.Width - (int)_font.MeasureString(_text).X, _pos.Y + _pos.Height / 2 - (int)_font.MeasureString(_text).Y / 2);
 
                 case textAlign.bottomLeft:
                     if (isVector)
-                    {
                         return new Vector(_pos.X - (int)_font.MeasureString(_text).X, _pos.Y);
-                    }
-                    else {
-                        return new Vector(_pos.X, _pos.Y + _pos.Height - (int)_font.MeasureString(_text).Y);
-                    }
+
+                    return new Vector(_pos.X, _pos.Y + _pos.Height - (int)_font.MeasureString(_text).Y);
 
                 case textAlign.bottomCenter:
                     if (isVector)
-                    {
                         return new Vector(_pos.X - (int)_font.MeasureString(_text).X / 2, _pos.Y);
-                    }
-                    else {
-                        return new Vector(_pos.X + _pos.Width / 2 - (int)_font.MeasureString(_text).X / 2, _pos.Y + _pos.Height - (int)_font.MeasureString(_text).Y);
-                    }
+
+                    return new Vector(_pos.X + _pos.Width / 2 - (int)_font.MeasureString(_text).X / 2, _pos.Y + _pos.Height - (int)_font.MeasureString(_text).Y);
 
                 case textAlign.bottomRight:
                     if (isVector)
-                    {
                         return new Vector(_pos.X, _pos.Y);
-                    }
-                    else {
-                        return new Vector(_pos.X + _pos.Width - (int)_font.MeasureString(_text).X, _pos.Y + _pos.Height - (int)_font.MeasureString(_text).Y);
-                    }
+
+                    return new Vector(_pos.X + _pos.Width - (int)_font.MeasureString(_text).X, _pos.Y + _pos.Height - (int)_font.MeasureString(_text).Y);
 
                 default:
                     return new Vector(_pos.X, _pos.Y);
@@ -195,6 +151,9 @@ namespace MyMonoGame.GUI
             return (placeHolder != null && (value == null || value == "")) ? placeHolder : value;
         }
 
+        /// <summary>
+        /// Draw Row Box
+        /// </summary>
         public void RenderBox(Rectangle pos, boxSprites backSprites, Color backColor)
         {
             int leftWidth = backSprites.topLeft.Width;
@@ -222,6 +181,9 @@ namespace MyMonoGame.GUI
             lastFocusY = short.MinValue;
         }
 
+        /// <summary>
+        /// Overflow cut
+        /// </summary>
         private void parseText(ref string text, SpriteFont font, int width)
         {
             string line = string.Empty;
@@ -245,7 +207,7 @@ namespace MyMonoGame.GUI
         /// <summary>
         /// Remove unprintable chars
         /// </summary>
-        private void clearString( ref string _text, SpriteFont _font)
+        private void clearString(ref string _text, SpriteFont _font)
         {
             StringBuilder sb = new StringBuilder(_text);
             for (int i = 0; i < sb.Length; i++)
@@ -273,25 +235,24 @@ namespace MyMonoGame.GUI
 
         /*================================================================================================================================================*/
 
-
         public void Box(Rectangle pos, boxSprites backSprites, Colors colors = null)
         {
-            if(colors == null) { colors = boxColors; }
-            Status status = GetStatus(pos, "Box");
+            if (colors == null) { colors = boxColors; }
+            Status status = GetStatus(pos);
             Color backColor = colors.Get(status);
             RenderBox(pos, backSprites, backColor);
         }
 
         public bool Button(Rectangle pos)
         {
-            Status status = GetStatus(pos, "Button");
+            Status status = GetStatus(pos);
             return status == Status.Active;
         }
 
         public bool Button(Rectangle pos, Texture2D texture, Colors colors = null)
         {
             if (colors == null) { colors = buttonColors; }
-            Status status = GetStatus(pos, "Button");
+            Status status = GetStatus(pos);
             Color backColor = colors.Get(status);
             spriteBatch.Draw(texture, pos, backColor);
             return status == Status.Active;
@@ -300,7 +261,7 @@ namespace MyMonoGame.GUI
         public bool Button(Rectangle pos, boxSprites backSprites, Colors colors = null)
         {
             if (colors == null) { colors = buttonColors; }
-            Status status = GetStatus(pos, "Button");
+            Status status = GetStatus(pos);
             Color backColor = colors.Get(status);
             RenderBox(pos, backSprites, backColor);
             return status == Status.Active;
@@ -309,7 +270,7 @@ namespace MyMonoGame.GUI
         public bool Button(Rectangle pos, string text, SpriteFont font, Colors colors = null, textAlign align = textAlign.centerCenter)
         {
             clearString(ref text, font);
-            Status status = GetStatus(pos, "Button");
+            Status status = GetStatus(pos);
             Label(pos, text, font, colors, align);
             return status == Status.Active;
         }
@@ -318,7 +279,7 @@ namespace MyMonoGame.GUI
         {
             clearString(ref text, font);
             Vector v = GetLabelPos(new Rectangle(vector.X, vector.Y, 0, 0), align, font, text);
-            Status status = GetStatus(new Rectangle(v.X, v.Y, (int)font.MeasureString(text).X, (int)font.MeasureString(text).Y), "Button");
+            Status status = GetStatus(new Rectangle(v.X, v.Y, (int)font.MeasureString(text).X, (int)font.MeasureString(text).Y));
             Label(vector, text, font, colors, align);
             return status == Status.Active;
         }
@@ -327,7 +288,7 @@ namespace MyMonoGame.GUI
         {
             clearString(ref text, font);
             if (colors == null) { colors = buttonColors; }
-            Status status = GetStatus(pos, "Button");
+            Status status = GetStatus(pos);
             Color backColor = colors.Get(status);
             RenderBox(pos, backSprites, backColor);
             Label(pos, text, font, textcolors, align);
@@ -337,7 +298,7 @@ namespace MyMonoGame.GUI
         public void Texture(Rectangle pos, Texture2D texture, Colors colors = null)
         {
             if (colors == null) { colors = boxColors; }
-            Status status = GetStatus(pos, "Button");
+            Status status = GetStatus(pos);
             Color backColor = colors.Get(status);
             spriteBatch.Draw(texture, pos, backColor);
         }
@@ -348,7 +309,7 @@ namespace MyMonoGame.GUI
             if (wrapping) { if (align == textAlign.topLeft) { parseText(ref text, font, pos.Width); } }
             if (colors == null) { colors = textColors; }
             Vector v = GetLabelPos(pos, align, font, text);
-            Status status = GetStatus(pos, "Button");
+            Status status = GetStatus(pos);
             Color backColor = colors.Get(status);
             spriteBatch.DrawString(font, text, new Vector2(v.X, v.Y), backColor);
         }
@@ -358,85 +319,83 @@ namespace MyMonoGame.GUI
             clearString(ref text, font);
             if (colors == null) { colors = textColors; }
             Vector v = GetLabelPos(new Rectangle(vector.X, vector.Y, 0, 0), align, font, text);
-            Status status = GetStatus(new Rectangle(v.X, v.Y, (int)font.MeasureString(text).X, (int)font.MeasureString(text).Y), "Button");
+            Status status = GetStatus(new Rectangle(v.X, v.Y, (int)font.MeasureString(text).X, (int)font.MeasureString(text).Y));
             Color backColor = colors.Get(status);
             spriteBatch.DrawString(font, text, new Vector2(v.X, v.Y), backColor);
         }
 
+        /// <returns>Enter Pressed</returns>
         public bool TextField(Rectangle pos, ref string value, SpriteFont font, Colors colors = null, textAlign align = textAlign.centerCenter, string placeHolder = null)
         {
             if (colors == null) { colors = textColors; }
             string _text = fieldText(value, placeHolder);
             clearString(ref _text, font);
             Vector v = GetLabelPos(pos, align, font, _text);
-            Status status = GetStatus(pos, "Button");
-            if(status == Status.Focus)
+            Status status = GetStatus(pos);
+            if (status == Status.Focus)
             {
                 //Only QWERTY support wait monogame 4.6 (https://github.com/MonoGame/MonoGame/issues/3836)
-                switch (nowKey)
+                if (keyboard.IsPressed(Keys.Back))
                 {
-                    case Keys.Back:
-                        if (value != null)
+                    if (value != null)
+                    {
+                        if (value.Length > 0)
                         {
-                            if (value.Length > 0)
-                            {
-                                value = value.Remove(value.Length - 1);
-                                _text = fieldText(value, placeHolder);
-                            }
-                        }
-                        break;
-
-                    default:
-                        char ch;
-                        if (Utilities.KeyString.KeyToString(nowKey, newKeys.Contains(Keys.LeftShift) || newKeys.Contains(Keys.RightShift), out ch))
-                        {
-                            value += ch;
+                            value = value.Remove(value.Length - 1);
                             _text = fieldText(value, placeHolder);
                         }
-                        break;
+                    }
+                }
+                else
+                {
+                    char ch;
+                    if (Utilities.KeyString.KeyToString(keyboard.key, keyboard.IsDown(Keys.LeftShift) || keyboard.IsDown(Keys.RightShift), out ch))
+                    {
+                        value += ch;
+                        _text = fieldText(value, placeHolder);
+                    }
                 }
             }
             Color backColor = colors.Get(status);
             spriteBatch.DrawString(font, _text, new Vector2(v.X, v.Y), backColor);
-            return nowKey == Keys.Enter;
+            return keyboard.key == Keys.Enter;
         }
 
+        /// <returns>Enter Pressed</returns>
         public bool TextField(Vector vector, ref string value, SpriteFont font, Colors colors = null, textAlign align = textAlign.bottomRight, string placeHolder = null)
         {
             if (colors == null) { colors = textColors; }
             string _text = fieldText(value, placeHolder);
             clearString(ref _text, font);
             Vector v = GetLabelPos(new Rectangle(vector.X, vector.Y, 0, 0), align, font, _text);
-            Status status = GetStatus(new Rectangle(v.X, v.Y, (int)font.MeasureString(_text).X, (int)font.MeasureString(_text).Y), "Button");
+            Status status = GetStatus(new Rectangle(v.X, v.Y, (int)font.MeasureString(_text).X, (int)font.MeasureString(_text).Y));
             if (status == Status.Focus)
             {
                 //Only QWERTY support wait monogame 4.6 (https://github.com/MonoGame/MonoGame/issues/3836)
-                switch (nowKey)
+                if (keyboard.IsPressed(Keys.Back))
                 {
-                    case Keys.Back:
-                        if (value != null)
+                    if (value != null)
+                    {
+                        if (value.Length > 0)
                         {
-                            if (value.Length > 0)
-                            {
-                                value = value.Remove(value.Length - 1);
-                                _text = fieldText(value, placeHolder);
-                            }
-                        }
-                        break;                       
-
-                    default:
-                        char ch;
-                        if (Utilities.KeyString.KeyToString(nowKey, newKeys.Contains(Keys.LeftShift) || newKeys.Contains(Keys.RightShift), out ch))
-                        {
-                            value += ch;
+                            value = value.Remove(value.Length - 1);
                             _text = fieldText(value, placeHolder);
                         }
-                        break;
+                    }
+                }
+                else
+                {
+                    char ch;
+                    if (Utilities.KeyString.KeyToString(keyboard.key, keyboard.IsDown(Keys.LeftShift) || keyboard.IsDown(Keys.RightShift), out ch))
+                    {
+                        value += ch;
+                        _text = fieldText(value, placeHolder);
+                    }
                 }
             }
             Color backColor = colors.Get(status);
             spriteBatch.DrawString(font, _text, new Vector2(v.X, v.Y), backColor);
-            return nowKey == Keys.Enter;
+            return keyboard.key == Keys.Enter;
         }
     }
 }

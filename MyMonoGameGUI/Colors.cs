@@ -29,14 +29,15 @@ namespace MyMonoGame
             _focus = focus;
         }
 
-        internal Color Get( GUI.Manager.Status status)
+        internal Color Get(GUI.Manager.Status status)
         {
             switch (status)
             {
                 case GUI.Manager.Status.Hover:
                     return _hover;
 
-                case GUI.Manager.Status.Focus: case GUI.Manager.Status.Active:
+                case GUI.Manager.Status.Focus:
+                case GUI.Manager.Status.Active:
                     return _focus;
 
                 default:

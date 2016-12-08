@@ -4,11 +4,14 @@ using System.Collections.Generic;
 
 namespace MyMonoGame.Utilities
 {
+    /// <summary>
+    /// Convert Microsoft.Xna.Framework.Input.Keys to char
+    /// </summary>
     public static class KeyString
     {
         private static Dictionary<Keys, CharPair> Data = new Dictionary<Keys, CharPair>();
 
-        class CharPair
+        private class CharPair
         {
             public CharPair(char normalChar, Nullable<char> shiftChar)
             {
@@ -28,13 +31,11 @@ namespace MyMonoGame.Utilities
 
             if ((Keys.A <= key && key <= Keys.Z) || key == Keys.Space)
             {
-                // Use as is if it is A～Z, or Space key.
                 character = (shitKeyPressed) ? (char)key : Char.ToLower((char)key);
                 result = true;
             }
             else if (Data.TryGetValue(key, out charPair))
             {
-                // Otherwise, convert by key map.
                 if (!shitKeyPressed)
                 {
                     character = charPair.NormalChar;
@@ -50,7 +51,7 @@ namespace MyMonoGame.Utilities
             return result;
         }
 
-        static void AddKeyMap(Keys key, string charPair)
+        private static void AddKeyMap(Keys key, string charPair)
         {
             char char1 = charPair[0];
             Nullable<char> char2 = null;
