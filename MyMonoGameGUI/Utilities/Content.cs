@@ -155,7 +155,7 @@ namespace MyMonoGame.Utilities
             if (path == null)
                 path = key;
 
-            AddSound(key, content.Load<SoundEffect>((fullPath ? "" : "Sounds/") + path + (fullPath ? "" : ".mp3")));
+            AddSound(key, content.Load<SoundEffect>((fullPath ? "" : "Sounds/") + path));
         }
 
         public void AddSound(string key, SoundEffect sound)
