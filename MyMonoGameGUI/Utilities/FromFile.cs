@@ -14,15 +14,16 @@ namespace MyMonoGame.Utilities
         /// </summary>
         /// <param name="path">File .png path</param>
         /// <param name="sprite">Result sprite</param>
-        static public void SpriteFromPng(string path, ref Texture2D sprite, GraphicsDevice graphics)
+        static public Texture2D SpriteFromPng(string path, GraphicsDevice graphics)
         {
             if (File.Exists(path))
             {
                 using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
-                    sprite = Texture2D.FromStream(graphics, fileStream);
+                    return Texture2D.FromStream(graphics, fileStream);
                 }
             }
+            return null;
         }
 
         /// <summary>
@@ -30,15 +31,16 @@ namespace MyMonoGame.Utilities
         /// </summary>
         /// <param name="path">File .mp3 path</param>
         /// <param name="sound">Result sound</param>
-        static public void SoundFromMp3(string path, ref SoundEffect sound)
+        static public SoundEffect SoundFromMp3(string path)
         {
             if (File.Exists(path))
             {
                 using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
-                    sound = SoundEffect.FromStream(fileStream);
+                    return SoundEffect.FromStream(fileStream);
                 }
             }
+            return null;
         }
     }
 }

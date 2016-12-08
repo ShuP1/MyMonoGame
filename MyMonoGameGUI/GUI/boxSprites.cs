@@ -17,6 +17,8 @@ namespace MyMonoGame.GUI
         public Texture2D bottomCenter;
         public Texture2D bottomRight;
 
+        public bool correct { get { return (topLeft != null && topCenter != null && topRight != null && centerLeft != null && centerCenter != null && centerRight != null && bottomLeft != null && bottomCenter != null && bottomRight != null); } }
+
         public boxSprites(Texture2D TopLeft,
          Texture2D TopCenter,
          Texture2D TopRight,

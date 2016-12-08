@@ -74,6 +74,15 @@ namespace MyMonoGame.Utilities
             textures.Add(key, texture);
         }
 
+        public void EditTexture(string key, Texture2D texture)
+        {
+            if (!textures.ContainsKey(key))
+                throw new System.Exception("No found");
+
+            if (texture != null)
+                textures[key] = texture;
+        }
+
         public Texture2D GetTexture(string key)
         {
             if (!textures.ContainsKey(key))
@@ -116,6 +125,15 @@ namespace MyMonoGame.Utilities
             boxs.Add(key, box);
         }
 
+        public void EditBox(string key, boxSprites box)
+        {
+            if (!boxs.ContainsKey(key))
+                throw new System.Exception("No found");
+
+            if (!box.correct)
+                boxs[key] = box;
+        }
+
         public boxSprites GetBox(string key)
         {
             if (!boxs.ContainsKey(key))
@@ -142,10 +160,19 @@ namespace MyMonoGame.Utilities
 
         public void AddSound(string key, SoundEffect sound)
         {
-            if (textures.ContainsKey(key))
+            if (sounds.ContainsKey(key))
                 throw new System.Exception("Allready in dictonary");
 
             sounds.Add(key, sound);
+        }
+
+        public void EditSound(string key, SoundEffect sound)
+        {
+            if (!sounds.ContainsKey(key))
+                throw new System.Exception("No found");
+
+            if (sound != null)
+                sounds[key] = sound;
         }
 
         public SoundEffect GetSound(string key)
@@ -178,6 +205,15 @@ namespace MyMonoGame.Utilities
                 throw new System.Exception("Allready in dictonary");
 
             fonts.Add(key, font);
+        }
+
+        public void EditFont(string key, SpriteFont font)
+        {
+            if (!fonts.ContainsKey(key))
+                throw new System.Exception("No found");
+
+            if (font != null)
+                fonts[key] = font;
         }
 
         public SpriteFont GetFont(string key)
