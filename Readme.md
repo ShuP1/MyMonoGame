@@ -1,11 +1,12 @@
-# Galactic Colors Control
+# MyMonogame
 
-MyMonogame is a simple gui library from [Monogame](https://github.com/MonoGame/MonoGame) create from [GCC](https://github.com/sheychen290/Galactic_Colors_Control)
+MyMonogame is a 'simple' gui library from [Monogame](https://github.com/MonoGame/MonoGame) create from [GCC](https://github.com/sheychen290/Galactic_Colors_Control)
 
 ### Prerequisities
 
 * .NET/[Mono](https://github.com/mono/mono) 4.5+
 * [Monogame](https://github.com/MonoGame/MonoGame) 3.5+
+* [OpenAL](https://www.openal.org/) => :warning: Not included in Windows :warning:
 
 ### Installing
 
@@ -28,8 +29,6 @@ As you wish, I am opened to new ideas.
 
 * **[Sheychen](https://sheychen.shost.ca)** - *Initial work*
 
-See also the list of [contributors](https://github.com/sheychen290/Galactic_Colors_Control/contributors) who participated in this project.
-
 ## License
 
-This project is licensed under the MIT License - see the [License.md](License.md) file for details
+This software comes under the terms of the GPLv3+. Previously under MIT license. See the [License.md](License.md) file for the complete text of the license.
