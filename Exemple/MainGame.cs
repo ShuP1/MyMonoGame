@@ -1,107 +1,123 @@
 ﻿using System;
 using MyMonoGameAddin;
-using MyMonoGameAddin.UI;
-using MyMonoGameAddin.Inputs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using System.Diagnostics;
 
 namespace Exemple
 {
-	/// <summary>
-	/// This is the main type for your game.
-	/// </summary>
-	public class Game1 : Game
+	public class MainGame : Game
 	{
+		enum GameState { Menu, Credit }
+
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
 		ResourcesManager resources;
-		InputsManager inputs = new InputsManager();
+		InputsManager inputs;
+		UIManager ui;
 
-		Layout canvas = new Layout();
-		Image pointer;
+		GameState state = GameState.Menu;
 
-		const int ScreenWidth = 800;
-		const int ScreenHeight = 600;
+		string Github;
 
-		public Game1()
+		public MainGame()
 		{
 			graphics = new GraphicsDeviceManager(this);
-			graphics.PreferredBackBufferWidth = ScreenWidth;
-			graphics.PreferredBackBufferHeight = ScreenHeight;
-			graphics.ApplyChanges();
+
+			Window.AllowUserResizing = true;
+			Window.AllowUserResizing = true;
+			Window.ClientSizeChanged += delegate
+			{
+				graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
+				graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
+				graphics.ApplyChanges();
+			};
+
 			Content.RootDirectory = "Content";
+
+			inputs = new InputsManager();
 			resources = new ResourcesManager(Content, GraphicsDevice);
 		}
 
-		/// <summary>
-		/// Allows the game to perform any initialization it needs to before starting to run.
-		/// This is where it can query for any required services and load any non-graphic
-		/// related content.  Calling base.Initialize will enumerate through any components
-		/// and initialize them as well.
-		/// </summary>
 		protected override void Initialize()
 		{
+			graphics.PreferredBackBufferWidth = 800;
+			graphics.PreferredBackBufferHeight = 600;
+			graphics.IsFullScreen = false;
+			graphics.ApplyChanges();
+
+			IsMouseVisible = true;
+
 			base.Initialize();
 		}
 
-		/// <summary>
-		/// LoadContent will be called once per game and is the place to load
-		/// all of your content.
-		/// </summary>
 		protected override void LoadContent()
 		{
-			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			//resources.LoadFont("basic");
+			resources.LoadFont("Normal");
+			resources.LoadFont("Title");
 			//resources.LoadSound("bip");
 			resources.LoadTexture("Background");
 			resources.LoadBox("Button");
-
-
-			BuildCanvas();
-			//TODO: use this.Content to load your game content here 
+			ui = new UIManager(spriteBatch, inputs, new Skin(resources.Boxes["Button"], resources.Fonts["Normal"], new Colors(Color.White, Color.LightGray, Color.DarkGray), new Colors(Color.Black, Color.Black, Color.White)));
 		}
 
-		/// <summary>
-		/// Allows the game to run logic such as updating the world,
-		/// checking for collisions, gathering input, and playing audio.
-		/// </summary>
-		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
 			inputs.Update();
-			// TODO: Add your update logic here
+			ui.Update();
 
 			base.Update(gameTime);
 		}
 
-		/// <summary>
-		/// This is called when the game should draw itself.
-		/// </summary>
-		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
-			pointer.Transform.Position = inputs.Mouse.Position;
+			graphics.GraphicsDevice.Clear(Color.DarkGray);
 
-			graphics.GraphicsDevice.Clear(Color.Black);
-
-			//TODO: Add your drawing code here
 			spriteBatch.Begin();
+			ui.Texture(new Rectangle(10, 10, 200, 150), resources.Textures["Background"]);
+			switch (state)
+			{
+				case GameState.Credit:
+					ui.Box(new Rectangle(200, 100, graphics.PreferredBackBufferWidth - 400, graphics.PreferredBackBufferWidth - 200), new Colors(Color.LightGray, Color.White));
+					ui.Label(new Vector(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 4), "By Sheychen", new Colors(Color.Red, Color.OrangeRed), null, UIManager.textAlign.centerCenter);
+					if (ui.Button(new Rectangle(graphics.PreferredBackBufferWidth / 2 - 100, graphics.PreferredBackBufferHeight / 2 - 100, 200, 40), "My website"))
+					{
+						Process.Start("https://sheychen.shost.ca");
+					}
+					if (ui.Button(new Rectangle(graphics.PreferredBackBufferWidth / 2 - 100, graphics.PreferredBackBufferHeight / 2 - 50, 200, 40), "Show on GitHub"))
+					{
+						Process.Start("https://github.com/sheychen290/MyMonoGame");
+					}
+					if (ui.Button(new Rectangle(graphics.PreferredBackBufferWidth / 2 - 100, graphics.PreferredBackBufferHeight / 2, 200, 40), "Back"))
+					{
+						state = GameState.Menu;
+					}
+					break;
 
-			canvas.Draw(spriteBatch, new Transform());
-
+				case GameState.Menu:
+					ui.Label(new Vector(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 4), "MyMonoGameAddin", new Colors(Color.Black, Color.Green), resources.Fonts["Title"], UIManager.textAlign.centerCenter);
+					if (ui.TextField(new Vector(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2), ref Github, new Colors(Color.White, Color.WhiteSmoke, Color.LightGray), null, UIManager.textAlign.centerCenter, "Search on Github"))
+					{
+						Process.Start("https://github.com/search?q=" + Github);
+						Github = null;
+					}
+					if (ui.Button(new Rectangle(graphics.PreferredBackBufferWidth / 2 - 100, graphics.PreferredBackBufferHeight * 3 / 4 + 50, 200, 40), "About", null, new Colors(Color.Black, Color.Green)))
+					{
+						state = GameState.Credit;
+					}
+					break;
+			}
 			spriteBatch.End();
 
 			base.Draw(gameTime);
 		}
 
-		private void BuildCanvas()
+		protected override void OnExiting(object sender, EventArgs args)
 		{
-			canvas.Children.Add(new Box(resources.Boxes["Button"], new Vector(10, 10), new Vector(100, 20), Color.White));
-			pointer = new Image(resources.Textures["Background"], new Vector(0, 0), new Vector(10, 10), Color.White);
-			canvas.Children.Add(pointer);
+			Process.GetCurrentProcess().Kill();
+			base.OnExiting(sender, args);
 		}
 	}
 }

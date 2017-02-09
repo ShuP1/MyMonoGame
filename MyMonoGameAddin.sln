@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exemple", "Exemple\Exemple.csproj", "{9C18BB68-EFE3-4E53-8761-B780F2BA5C52}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMonoGameAddin", "MyMonoGameAddin\MyMonoGameAddin.csproj", "{FF4B3F52-D94E-4F54-A829-C1492B875267}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -13,5 +15,9 @@ Global
 		{9C18BB68-EFE3-4E53-8761-B780F2BA5C52}.Debug|x86.Build.0 = Debug|x86
 		{9C18BB68-EFE3-4E53-8761-B780F2BA5C52}.Release|x86.ActiveCfg = Release|x86
 		{9C18BB68-EFE3-4E53-8761-B780F2BA5C52}.Release|x86.Build.0 = Release|x86
+		{FF4B3F52-D94E-4F54-A829-C1492B875267}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FF4B3F52-D94E-4F54-A829-C1492B875267}.Debug|x86.Build.0 = Debug|Any CPU
+		{FF4B3F52-D94E-4F54-A829-C1492B875267}.Release|x86.ActiveCfg = Release|Any CPU
+		{FF4B3F52-D94E-4F54-A829-C1492B875267}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
