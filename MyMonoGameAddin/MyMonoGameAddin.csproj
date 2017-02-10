@@ -43,6 +43,7 @@
     <Compile Include="KeyChar.cs" />
     <Compile Include="Colors.cs" />
     <Compile Include="Skin.cs" />
+    <Compile Include="ScreenManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

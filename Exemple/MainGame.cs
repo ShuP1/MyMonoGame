@@ -10,7 +10,7 @@ namespace Exemple
 	{
 		enum GameState { Menu, Credit }
 
-		GraphicsDeviceManager graphics;
+		ScreenManager screen;
 		SpriteBatch spriteBatch;
 		ResourcesManager resources;
 		InputsManager inputs;
@@ -22,16 +22,7 @@ namespace Exemple
 
 		public MainGame()
 		{
-			graphics = new GraphicsDeviceManager(this);
-
-			Window.AllowUserResizing = true;
-			Window.AllowUserResizing = true;
-			Window.ClientSizeChanged += delegate
-			{
-				graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
-				graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
-				graphics.ApplyChanges();
-			};
+			screen = new ScreenManager(this);
 
 			Content.RootDirectory = "Content";
 
@@ -41,13 +32,7 @@ namespace Exemple
 
 		protected override void Initialize()
 		{
-			graphics.PreferredBackBufferWidth = 800;
-			graphics.PreferredBackBufferHeight = 600;
-			graphics.IsFullScreen = false;
-			graphics.ApplyChanges();
-
-			IsMouseVisible = true;
-
+			screen.Initialize(new Vector(800, 600), false, true, true);
 			base.Initialize();
 		}
 
@@ -73,37 +58,37 @@ namespace Exemple
 
 		protected override void Draw(GameTime gameTime)
 		{
-			graphics.GraphicsDevice.Clear(Color.DarkGray);
+			screen.Clear(Color.DarkGray);
 
 			spriteBatch.Begin();
 			ui.Texture(new Rectangle(10, 10, 200, 150), resources.Textures["Background"]);
 			switch (state)
 			{
 				case GameState.Credit:
-					ui.Box(new Rectangle(200, 100, graphics.PreferredBackBufferWidth - 400, graphics.PreferredBackBufferWidth - 200), new Colors(Color.LightGray, Color.White));
-					ui.Label(new Vector(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 4), "By Sheychen", new Colors(Color.Red, Color.OrangeRed), null, UIManager.textAlign.centerCenter);
-					if (ui.Button(new Rectangle(graphics.PreferredBackBufferWidth / 2 - 100, graphics.PreferredBackBufferHeight / 2 - 100, 200, 40), "My website"))
+					ui.Box(new Rectangle(200, 100, screen.size.X - 400, screen.size.X - 200), new Colors(Color.LightGray, Color.White));
+					ui.Label(new Vector(screen.size.X / 2, screen.size.Y / 4), "By Sheychen", new Colors(Color.Red, Color.OrangeRed), null, UIManager.textAlign.centerCenter);
+					if (ui.Button(new Rectangle(screen.size.X / 2 - 100, screen.size.Y / 2 - 100, 200, 40), "My website"))
 					{
 						Process.Start("https://sheychen.shost.ca");
 					}
-					if (ui.Button(new Rectangle(graphics.PreferredBackBufferWidth / 2 - 100, graphics.PreferredBackBufferHeight / 2 - 50, 200, 40), "Show on GitHub"))
+					if (ui.Button(new Rectangle(screen.size.X / 2 - 100, screen.size.Y / 2 - 50, 200, 40), "Show on GitHub"))
 					{
 						Process.Start("https://github.com/sheychen290/MyMonoGame");
 					}
-					if (ui.Button(new Rectangle(graphics.PreferredBackBufferWidth / 2 - 100, graphics.PreferredBackBufferHeight / 2, 200, 40), "Back"))
+					if (ui.Button(new Rectangle(screen.size.X / 2 - 100, screen.size.Y / 2, 200, 40), "Back"))
 					{
 						state = GameState.Menu;
 					}
 					break;
 
 				case GameState.Menu:
-					ui.Label(new Vector(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 4), "MyMonoGameAddin", new Colors(Color.Black, Color.Green), resources.Fonts["Title"], UIManager.textAlign.centerCenter);
-					if (ui.TextField(new Vector(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2), ref Github, new Colors(Color.White, Color.WhiteSmoke, Color.LightGray), null, UIManager.textAlign.centerCenter, "Search on Github"))
+					ui.Label(new Vector(screen.size.X / 2, screen.size.Y / 4), "MyMonoGameAddin", new Colors(Color.Black, Color.Green), resources.Fonts["Title"], UIManager.textAlign.centerCenter);
+					if (ui.TextField(new Vector(screen.size.X / 2, screen.size.Y / 2), ref Github, new Colors(Color.White, Color.WhiteSmoke, Color.LightGray), null, UIManager.textAlign.centerCenter, "Search on Github"))
 					{
 						Process.Start("https://github.com/search?q=" + Github);
 						Github = null;
 					}
-					if (ui.Button(new Rectangle(graphics.PreferredBackBufferWidth / 2 - 100, graphics.PreferredBackBufferHeight * 3 / 4 + 50, 200, 40), "About", null, new Colors(Color.Black, Color.Green)))
+					if (ui.Button(new Rectangle(screen.size.X / 2 - 100, screen.size.Y * 3 / 4 + 50, 200, 40), "About", null, new Colors(Color.Black, Color.Green)))
 					{
 						state = GameState.Credit;
 					}
